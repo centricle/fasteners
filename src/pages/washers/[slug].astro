@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import FastenerIcon from '../../components/FastenerIcon.astro';
 import { washers } from '../../utils/data';
 import type { Washer } from '../../types/fastener';
 
@@ -84,12 +85,15 @@ function formatWasherType(type: string | undefined): string {
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Main Content -->
       <div class="lg:col-span-2 space-y-8">
-        <div>
-          <h1 class="text-4xl font-bold mb-4">{washer.name}</h1>
-          {washer.aliases && washer.aliases.length > 0 && (
-            <p class="text-zinc-400 mb-4">Also known as: {washer.aliases.join(', ')}</p>
-          )}
-          <p class="text-lg text-zinc-300">{washer.description}</p>
+        <div class="flex items-start gap-6">
+          <FastenerIcon slug={washer.slug} category="washers" class="w-20 shrink-0 text-zinc-400" />
+          <div>
+            <h1 class="text-4xl font-bold mb-4">{washer.name}</h1>
+            {washer.aliases && washer.aliases.length > 0 && (
+              <p class="text-zinc-400 mb-4">Also known as: {washer.aliases.join(', ')}</p>
+            )}
+            <p class="text-lg text-zinc-300">{washer.description}</p>
+          </div>
         </div>
 
         <!-- Quick Specs -->

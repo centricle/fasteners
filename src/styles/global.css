@@ -12,6 +12,7 @@
   --color-primary-800: oklch(0.35 0.12 250);
   --color-primary-900: oklch(0.28 0.08 250);
   --color-primary-950: oklch(0.18 0.04 250);
+  --color-svg-inset: oklch(0.35 0.01 250);
 }
 
 html {

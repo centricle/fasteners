@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import FastenerIcon from '../../components/FastenerIcon.astro';
 import { screws } from '../../utils/data';
 import type { Screw } from '../../types/fastener';
 
@@ -95,12 +96,15 @@ function formatHeadStyle(head: string | undefined): string {
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Main Content -->
       <div class="lg:col-span-2 space-y-8">
-        <div>
-          <h1 class="text-4xl font-bold mb-4">{screw.name}</h1>
-          {screw.aliases && screw.aliases.length > 0 && (
-            <p class="text-zinc-400 mb-4">Also known as: {screw.aliases.join(', ')}</p>
-          )}
-          <p class="text-lg text-zinc-300">{screw.description}</p>
+        <div class="flex items-start gap-6">
+          <FastenerIcon slug={screw.slug} category="screws" class="w-20 shrink-0 text-zinc-400" />
+          <div>
+            <h1 class="text-4xl font-bold mb-4">{screw.name}</h1>
+            {screw.aliases && screw.aliases.length > 0 && (
+              <p class="text-zinc-400 mb-4">Also known as: {screw.aliases.join(', ')}</p>
+            )}
+            <p class="text-lg text-zinc-300">{screw.description}</p>
+          </div>
         </div>
 
         <!-- Quick Specs -->

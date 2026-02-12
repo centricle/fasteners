@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FastenerIcon from '../components/FastenerIcon.astro';
 import { washers } from '../utils/data';
 ---
 
@@ -12,16 +13,19 @@ import { washers } from '../utils/data';
 
     <div class="grid gap-4">
       {washers.map((washer) => (
-        <a href={`/washers/${washer.slug}`} class="block rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 hover:border-blue-500/50 hover:bg-zinc-900 transition-colors">
-          <h2 class="text-xl font-semibold mb-2">{washer.name}</h2>
-          <p class="text-zinc-400 mb-4">{washer.description}</p>
-          <div class="flex flex-wrap gap-2">
-            {washer.materials.slice(0, 3).map((material) => (
-              <span class="px-2 py-1 text-xs rounded bg-zinc-800 text-zinc-300">{material}</span>
-            ))}
-            {washer.washerType && (
-              <span class="px-2 py-1 text-xs rounded bg-blue-900/50 text-blue-300">{washer.washerType} type</span>
-            )}
+        <a href={`/washers/${washer.slug}`} class="flex gap-4 items-start rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 hover:border-blue-500/50 hover:bg-zinc-900 transition-colors">
+          <FastenerIcon slug={washer.slug} category="washers" class="w-12 shrink-0 text-zinc-500" />
+          <div>
+            <h2 class="text-xl font-semibold mb-2">{washer.name}</h2>
+            <p class="text-zinc-400 mb-4">{washer.description}</p>
+            <div class="flex flex-wrap gap-2">
+              {washer.materials.slice(0, 3).map((material) => (
+                <span class="px-2 py-1 text-xs rounded bg-zinc-800 text-zinc-300">{material}</span>
+              ))}
+              {washer.washerType && (
+                <span class="px-2 py-1 text-xs rounded bg-blue-900/50 text-blue-300">{washer.washerType} type</span>
+              )}
+            </div>
           </div>
         </a>
       ))}

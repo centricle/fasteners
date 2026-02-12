@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FastenerIcon from '../components/FastenerIcon.astro';
 import { screws, bolts, anchors, nuts, washers } from '../utils/data';
 
 const categories = [
@@ -7,31 +8,41 @@ const categories = [
     name: 'Screws',
     href: '/screws',
     description: 'Wood screws, machine screws, self-tapping, and specialty screws',
-    count: screws.length
+    count: screws.length,
+    iconSlug: 'wood-screw',
+    iconCategory: 'screws' as const
   },
   {
     name: 'Bolts',
     href: '/bolts',
     description: 'Hex bolts, carriage bolts, eye bolts, and structural fasteners',
-    count: bolts.length
+    count: bolts.length,
+    iconSlug: 'hex-bolt',
+    iconCategory: 'bolts' as const
   },
   {
     name: 'Anchors',
     href: '/anchors',
     description: 'Wall anchors, concrete anchors, toggle bolts, and expansion anchors',
-    count: anchors.length
+    count: anchors.length,
+    iconSlug: 'wedge-anchor',
+    iconCategory: 'anchors' as const
   },
   {
     name: 'Nuts',
     href: '/nuts',
     description: 'Hex nuts, lock nuts, wing nuts, and specialty nuts',
-    count: nuts.length
+    count: nuts.length,
+    iconSlug: 'hex-nut',
+    iconCategory: 'nuts' as const
   },
   {
     name: 'Washers',
     href: '/washers',
     description: 'Flat washers, lock washers, spring washers, and specialty washers',
-    count: washers.length
+    count: washers.length,
+    iconSlug: 'flat-washer',
+    iconCategory: 'washers' as const
   }
 ];
 ---
@@ -52,15 +63,18 @@ const categories = [
       {categories.map((category) => (
         <a
           href={category.href}
-          class="block p-6 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:border-primary-600 hover:bg-zinc-900 transition-all group"
+          class="flex gap-5 items-start p-6 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:border-primary-600 hover:bg-zinc-900 transition-all group"
         >
-          <h2 class="text-2xl font-semibold text-zinc-100 group-hover:text-primary-400 transition-colors mb-2">
-            {category.name}
-          </h2>
-          <p class="text-zinc-400 mb-4">{category.description}</p>
-          <span class="text-sm text-zinc-500">
-            {category.count > 0 ? `${category.count} types` : 'Coming soon'}
-          </span>
+          <FastenerIcon slug={category.iconSlug} category={category.iconCategory} class="w-14 shrink-0 text-zinc-500 group-hover:text-primary-400 transition-colors" />
+          <div>
+            <h2 class="text-2xl font-semibold text-zinc-100 group-hover:text-primary-400 transition-colors mb-2">
+              {category.name}
+            </h2>
+            <p class="text-zinc-400 mb-4">{category.description}</p>
+            <span class="text-sm text-zinc-500">
+              {category.count > 0 ? `${category.count} types` : 'Coming soon'}
+            </span>
+          </div>
         </a>
       ))}
     </div>

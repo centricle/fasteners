@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FastenerIcon from '../components/FastenerIcon.astro';
 import { nuts } from '../utils/data';
 ---
 
@@ -12,16 +13,19 @@ import { nuts } from '../utils/data';
 
     <div class="grid gap-4">
       {nuts.map((nut) => (
-        <a href={`/nuts/${nut.slug}`} class="block rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 hover:border-blue-500/50 hover:bg-zinc-900 transition-colors">
-          <h2 class="text-xl font-semibold mb-2">{nut.name}</h2>
-          <p class="text-zinc-400 mb-4">{nut.description}</p>
-          <div class="flex flex-wrap gap-2">
-            {nut.materials.slice(0, 3).map((material) => (
-              <span class="px-2 py-1 text-xs rounded bg-zinc-800 text-zinc-300">{material}</span>
-            ))}
-            {nut.lockingMechanism && nut.lockingMechanism !== 'none' && (
-              <span class="px-2 py-1 text-xs rounded bg-purple-900/50 text-purple-300">{nut.lockingMechanism}</span>
-            )}
+        <a href={`/nuts/${nut.slug}`} class="flex gap-4 items-start rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 hover:border-blue-500/50 hover:bg-zinc-900 transition-colors">
+          <FastenerIcon slug={nut.slug} category="nuts" class="w-12 shrink-0 text-zinc-500" />
+          <div>
+            <h2 class="text-xl font-semibold mb-2">{nut.name}</h2>
+            <p class="text-zinc-400 mb-4">{nut.description}</p>
+            <div class="flex flex-wrap gap-2">
+              {nut.materials.slice(0, 3).map((material) => (
+                <span class="px-2 py-1 text-xs rounded bg-zinc-800 text-zinc-300">{material}</span>
+              ))}
+              {nut.lockingMechanism && nut.lockingMechanism !== 'none' && (
+                <span class="px-2 py-1 text-xs rounded bg-purple-900/50 text-purple-300">{nut.lockingMechanism}</span>
+              )}
+            </div>
           </div>
         </a>
       ))}

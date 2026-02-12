@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FastenerIcon from '../components/FastenerIcon.astro';
 import { bolts } from '../utils/data';
 ---
 
@@ -12,16 +13,19 @@ import { bolts } from '../utils/data';
 
     <div class="grid gap-4">
       {bolts.map((bolt) => (
-        <a href={`/bolts/${bolt.slug}`} class="block rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 hover:border-blue-500/50 hover:bg-zinc-900 transition-colors">
-          <h2 class="text-xl font-semibold mb-2">{bolt.name}</h2>
-          <p class="text-zinc-400 mb-4">{bolt.description}</p>
-          <div class="flex flex-wrap gap-2">
-            {bolt.materials.slice(0, 3).map((material) => (
-              <span class="px-2 py-1 text-xs rounded bg-zinc-800 text-zinc-300">{material}</span>
-            ))}
-            {bolt.nutRequired && (
-              <span class="px-2 py-1 text-xs rounded bg-amber-900/50 text-amber-300">nut required</span>
-            )}
+        <a href={`/bolts/${bolt.slug}`} class="flex gap-4 items-start rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 hover:border-blue-500/50 hover:bg-zinc-900 transition-colors">
+          <FastenerIcon slug={bolt.slug} category="bolts" class="w-12 shrink-0 text-zinc-500" />
+          <div>
+            <h2 class="text-xl font-semibold mb-2">{bolt.name}</h2>
+            <p class="text-zinc-400 mb-4">{bolt.description}</p>
+            <div class="flex flex-wrap gap-2">
+              {bolt.materials.slice(0, 3).map((material) => (
+                <span class="px-2 py-1 text-xs rounded bg-zinc-800 text-zinc-300">{material}</span>
+              ))}
+              {bolt.nutRequired && (
+                <span class="px-2 py-1 text-xs rounded bg-amber-900/50 text-amber-300">nut required</span>
+              )}
+            </div>
           </div>
         </a>
       ))}
