@@ -7,23 +7,23 @@ import { screws } from '../utils/data';
 <BaseLayout title="Screws" description="Comprehensive screw specifications - wood screws, machine screws, self-tapping, and specialty screws.">
   <div class="max-w-6xl mx-auto px-4 py-16">
     <h1 class="text-4xl font-bold mb-4">Screws</h1>
-    <p class="text-xl text-zinc-400 mb-8">
+    <p class="text-xl text-bp-text-muted mb-8">
       Wood screws, machine screws, self-tapping, and specialty screws.
     </p>
 
     <div class="grid gap-4">
       {screws.map((screw) => (
-        <a href={`/screws/${screw.slug}`} class="flex gap-4 items-start rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 hover:border-blue-500/50 hover:bg-zinc-900 transition-colors">
-          <FastenerIcon slug={screw.slug} category="screws" class="w-12 shrink-0 text-zinc-500" />
+        <a href={`/screws/${screw.slug}`} class="flex gap-4 items-start rounded-lg border border-bp-700 bg-bp-900/60 p-6 hover:border-accent-500 hover:bg-bp-900 transition-colors">
+          <FastenerIcon slug={screw.slug} category="screws" class="w-12 shrink-0 text-bp-text-faint" />
           <div>
             <h2 class="text-xl font-semibold mb-2">{screw.name}</h2>
-            <p class="text-zinc-400 mb-4">{screw.description}</p>
+            <p class="text-bp-text-muted mb-4">{screw.description}</p>
             <div class="flex flex-wrap gap-2">
               {screw.materials.slice(0, 3).map((material) => (
-                <span class="px-2 py-1 text-xs rounded bg-zinc-800 text-zinc-300">{material}</span>
+                <span class="px-2 py-1 text-xs rounded bg-bp-800 text-bp-text">{material}</span>
               ))}
               {screw.driveType && (
-                <span class="px-2 py-1 text-xs rounded bg-blue-900/50 text-blue-300">{screw.driveType} drive</span>
+                <span class="px-2 py-1 text-xs rounded bg-bp-800 text-accent-400">{screw.driveType} drive</span>
               )}
             </div>
           </div>

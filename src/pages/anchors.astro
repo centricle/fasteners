@@ -7,20 +7,20 @@ import { anchors } from '../utils/data';
 <BaseLayout title="Anchors" description="Wall and concrete anchor specifications - toggle bolts, wedge anchors, and drywall anchors.">
   <div class="max-w-6xl mx-auto px-4 py-16">
     <h1 class="text-4xl font-bold mb-4">Anchors</h1>
-    <p class="text-xl text-zinc-400 mb-8">
+    <p class="text-xl text-bp-text-muted mb-8">
       Wall anchors, concrete anchors, toggle bolts, and expansion anchors.
     </p>
 
     <div class="grid gap-4">
       {anchors.map((anchor) => (
-        <a href={`/anchors/${anchor.slug}`} class="flex gap-4 items-start rounded-lg border border-zinc-800 bg-zinc-900/50 p-6 hover:border-blue-500/50 hover:bg-zinc-900 transition-colors">
-          <FastenerIcon slug={anchor.slug} category="anchors" class="w-12 shrink-0 text-zinc-500" />
+        <a href={`/anchors/${anchor.slug}`} class="flex gap-4 items-start rounded-lg border border-bp-700 bg-bp-900/60 p-6 hover:border-accent-500 hover:bg-bp-900 transition-colors">
+          <FastenerIcon slug={anchor.slug} category="anchors" class="w-12 shrink-0 text-bp-text-faint" />
           <div>
             <h2 class="text-xl font-semibold mb-2">{anchor.name}</h2>
-            <p class="text-zinc-400 mb-4">{anchor.description}</p>
+            <p class="text-bp-text-muted mb-4">{anchor.description}</p>
             <div class="flex flex-wrap gap-2">
               {anchor.baseMaterial.map((material) => (
-                <span class="px-2 py-1 text-xs rounded bg-zinc-800 text-zinc-300">{material}</span>
+                <span class="px-2 py-1 text-xs rounded bg-bp-800 text-bp-text">{material}</span>
               ))}
               {anchor.loadCapacity?.tension && (
                 <span class="px-2 py-1 text-xs rounded bg-green-900/50 text-green-300">{anchor.loadCapacity.tension} {anchor.loadCapacity.unit} tension</span>

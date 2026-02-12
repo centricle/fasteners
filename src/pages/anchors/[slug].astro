@@ -75,14 +75,14 @@ function formatBaseMaterial(material: string): string {
     <nav class="mb-8 flex text-sm" aria-label="Breadcrumb">
       <ol class="inline-flex items-center space-x-2">
         <li>
-          <a href="/" class="text-zinc-400 hover:text-zinc-100">Home</a>
+          <a href="/" class="text-bp-text-muted hover:text-bp-text">Home</a>
         </li>
-        <li class="text-zinc-600">/</li>
+        <li class="text-bp-text-faint">/</li>
         <li>
-          <a href="/anchors" class="text-zinc-400 hover:text-zinc-100">Anchors</a>
+          <a href="/anchors" class="text-bp-text-muted hover:text-bp-text">Anchors</a>
         </li>
-        <li class="text-zinc-600">/</li>
-        <li class="text-zinc-300">{anchor.name}</li>
+        <li class="text-bp-text-faint">/</li>
+        <li class="text-bp-text">{anchor.name}</li>
       </ol>
     </nav>
 
@@ -90,18 +90,18 @@ function formatBaseMaterial(material: string): string {
       <!-- Main Content -->
       <div class="lg:col-span-2 space-y-8">
         <div class="flex items-start gap-6">
-          <FastenerIcon slug={anchor.slug} category="anchors" class="w-20 shrink-0 text-zinc-400" />
+          <FastenerIcon slug={anchor.slug} category="anchors" class="w-20 shrink-0 text-bp-text-muted" />
           <div>
             <h1 class="text-4xl font-bold mb-4">{anchor.name}</h1>
             {anchor.aliases && anchor.aliases.length > 0 && (
-              <p class="text-zinc-400 mb-4">Also known as: {anchor.aliases.join(', ')}</p>
+              <p class="text-bp-text-muted mb-4">Also known as: {anchor.aliases.join(', ')}</p>
             )}
-            <p class="text-lg text-zinc-300">{anchor.description}</p>
+            <p class="text-lg text-bp-text">{anchor.description}</p>
           </div>
         </div>
 
         <!-- Base Materials -->
-        <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+        <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
           <h2 class="text-xl font-semibold mb-4">Compatible Base Materials</h2>
           <div class="flex flex-wrap gap-2">
             {anchor.baseMaterial.map((material) => (
@@ -114,59 +114,59 @@ function formatBaseMaterial(material: string): string {
 
         <!-- Load Capacity -->
         {anchor.loadCapacity && (
-          <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+          <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
             <h2 class="text-xl font-semibold mb-4">Load Capacity</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               {anchor.loadCapacity.tension && (
-                <div class="text-center p-4 bg-zinc-800/50 rounded-lg">
-                  <p class="text-sm text-zinc-500 mb-1">Tension (Pull-out)</p>
-                  <p class="text-3xl font-bold text-primary-400">{anchor.loadCapacity.tension}</p>
-                  <p class="text-sm text-zinc-400">{anchor.loadCapacity.unit}</p>
+                <div class="text-center p-4 bg-bp-800/50 rounded-lg">
+                  <p class="text-sm text-bp-text-faint mb-1">Tension (Pull-out)</p>
+                  <p class="text-3xl font-bold text-accent-400">{anchor.loadCapacity.tension}</p>
+                  <p class="text-sm text-bp-text-muted">{anchor.loadCapacity.unit}</p>
                 </div>
               )}
               {anchor.loadCapacity.shear && (
-                <div class="text-center p-4 bg-zinc-800/50 rounded-lg">
-                  <p class="text-sm text-zinc-500 mb-1">Shear (Sideways)</p>
-                  <p class="text-3xl font-bold text-primary-400">{anchor.loadCapacity.shear}</p>
-                  <p class="text-sm text-zinc-400">{anchor.loadCapacity.unit}</p>
+                <div class="text-center p-4 bg-bp-800/50 rounded-lg">
+                  <p class="text-sm text-bp-text-faint mb-1">Shear (Sideways)</p>
+                  <p class="text-3xl font-bold text-accent-400">{anchor.loadCapacity.shear}</p>
+                  <p class="text-sm text-bp-text-muted">{anchor.loadCapacity.unit}</p>
                 </div>
               )}
             </div>
-            <p class="text-xs text-zinc-500 mt-4">
+            <p class="text-xs text-bp-text-faint mt-4">
               * Load ratings are typical values. Actual capacity varies by installation conditions, base material quality, and anchor size.
             </p>
           </div>
         )}
 
         <!-- Dimensions -->
-        <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+        <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
           <h2 class="text-xl font-semibold mb-4">Dimensions</h2>
           <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {anchor.diameterRange && (
               <div>
-                <dt class="text-sm text-zinc-500">Diameter Range</dt>
+                <dt class="text-sm text-bp-text-faint">Diameter Range</dt>
                 <dd class="text-lg">{formatRange(anchor.diameterRange)}</dd>
               </div>
             )}
             {anchor.lengthRange && (
               <div>
-                <dt class="text-sm text-zinc-500">Length Range</dt>
+                <dt class="text-sm text-bp-text-faint">Length Range</dt>
                 <dd class="text-lg">{formatRange(anchor.lengthRange)}</dd>
               </div>
             )}
             <div>
-              <dt class="text-sm text-zinc-500">Measurement System</dt>
+              <dt class="text-sm text-bp-text-faint">Measurement System</dt>
               <dd class="text-lg">{anchor.measurementSystem.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(', ')}</dd>
             </div>
           </dl>
         </div>
 
         <!-- Materials -->
-        <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+        <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
           <h2 class="text-xl font-semibold mb-4">Anchor Materials</h2>
           <div class="flex flex-wrap gap-2">
             {anchor.materials.map((material) => (
-              <span class="px-3 py-1 rounded-full bg-zinc-800 text-zinc-300 text-sm">
+              <span class="px-3 py-1 rounded-full bg-bp-800 text-bp-text text-sm">
                 {material.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </span>
             ))}
@@ -175,11 +175,11 @@ function formatBaseMaterial(material: string): string {
 
         <!-- Standards -->
         {anchor.standards && anchor.standards.length > 0 && (
-          <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+          <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
             <h2 class="text-xl font-semibold mb-4">Standards</h2>
             <div class="flex flex-wrap gap-2">
               {anchor.standards.map((standard) => (
-                <span class="px-3 py-1 rounded border border-zinc-700 text-zinc-300 text-sm font-mono">
+                <span class="px-3 py-1 rounded border border-bp-600 text-bp-text text-sm font-mono">
                   {standard}
                 </span>
               ))}
@@ -191,9 +191,9 @@ function formatBaseMaterial(material: string): string {
       <!-- Sidebar -->
       <div class="space-y-6">
         <!-- Applications -->
-        <div class="border border-zinc-800 rounded-lg p-6 bg-blue-950/30">
+        <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/40">
           <h3 class="text-lg font-semibold mb-4">Common Applications</h3>
-          <ul class="space-y-2 text-zinc-300">
+          <ul class="space-y-2 text-bp-text">
             {anchor.applications.map((app) => (
               <li class="flex items-start gap-2">
                 <span class="text-green-500 mt-1">+</span>
@@ -205,9 +205,9 @@ function formatBaseMaterial(material: string): string {
 
         <!-- Not Recommended -->
         {anchor.notRecommendedFor && anchor.notRecommendedFor.length > 0 && (
-          <div class="border border-zinc-800 rounded-lg p-6 bg-red-950/20">
+          <div class="border border-bp-700 rounded-lg p-6 bg-red-950/30">
             <h3 class="text-lg font-semibold mb-4">Not Recommended For</h3>
-            <ul class="space-y-2 text-zinc-300">
+            <ul class="space-y-2 text-bp-text">
               {anchor.notRecommendedFor.map((item) => (
                 <li class="flex items-start gap-2">
                   <span class="text-red-500 mt-1">-</span>
@@ -220,11 +220,11 @@ function formatBaseMaterial(material: string): string {
 
         <!-- Related Fasteners -->
         {anchor.relatedFasteners && anchor.relatedFasteners.length > 0 && (
-          <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+          <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
             <h3 class="text-lg font-semibold mb-4">Related Fasteners</h3>
             <div class="flex flex-wrap gap-2">
               {anchor.relatedFasteners.map((slug) => (
-                <a href={`/anchors/${slug}`} class="px-3 py-1 rounded bg-zinc-800 text-primary-400 hover:bg-zinc-700 text-sm transition-colors">
+                <a href={`/anchors/${slug}`} class="px-3 py-1 rounded bg-bp-800 text-accent-400 hover:bg-bp-700 text-sm transition-colors">
                   {slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </a>
               ))}

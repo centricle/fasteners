@@ -35,34 +35,34 @@ const description = 'Compare specifications side-by-side for screws, bolts, anch
       <nav class="flex mb-6 text-sm" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-2">
           <li>
-            <a href="/" class="text-zinc-400 hover:text-zinc-100">Home</a>
+            <a href="/" class="text-bp-text-muted hover:text-bp-text">Home</a>
           </li>
-          <li class="text-zinc-600">/</li>
-          <li class="text-zinc-300">Compare</li>
+          <li class="text-bp-text-faint">/</li>
+          <li class="text-bp-text">Compare</li>
         </ol>
       </nav>
 
       <h1 class="text-4xl font-bold mb-4">Compare Fasteners</h1>
-      <p class="text-zinc-400">Select 2-3 fasteners to compare their specifications side-by-side.</p>
+      <p class="text-bp-text-muted">Select 2-3 fasteners to compare their specifications side-by-side.</p>
     </div>
 
     <!-- Selection Controls -->
     <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
       <div>
-        <label class="block text-sm text-zinc-400 mb-2">Fastener 1</label>
-        <select id="select-1" class="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-lg text-zinc-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+        <label class="block text-sm text-bp-text-muted mb-2">Fastener 1</label>
+        <select id="select-1" class="w-full px-4 py-3 bg-bp-900 border border-bp-600 rounded-lg text-bp-text focus:ring-2 focus:ring-accent-500 focus:border-accent-500">
           <option value="">Select a fastener...</option>
         </select>
       </div>
       <div>
-        <label class="block text-sm text-zinc-400 mb-2">Fastener 2</label>
-        <select id="select-2" class="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-lg text-zinc-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+        <label class="block text-sm text-bp-text-muted mb-2">Fastener 2</label>
+        <select id="select-2" class="w-full px-4 py-3 bg-bp-900 border border-bp-600 rounded-lg text-bp-text focus:ring-2 focus:ring-accent-500 focus:border-accent-500">
           <option value="">Select a fastener...</option>
         </select>
       </div>
       <div>
-        <label class="block text-sm text-zinc-400 mb-2">Fastener 3 (optional)</label>
-        <select id="select-3" class="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-lg text-zinc-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+        <label class="block text-sm text-bp-text-muted mb-2">Fastener 3 (optional)</label>
+        <select id="select-3" class="w-full px-4 py-3 bg-bp-900 border border-bp-600 rounded-lg text-bp-text focus:ring-2 focus:ring-accent-500 focus:border-accent-500">
           <option value="">Select a fastener...</option>
         </select>
       </div>
@@ -73,8 +73,8 @@ const description = 'Compare specifications side-by-side for screws, bolts, anch
       <div class="overflow-x-auto">
         <table class="w-full border-collapse">
           <thead>
-            <tr id="table-header" class="border-b border-zinc-700">
-              <th class="text-left py-4 px-4 text-zinc-400 font-medium w-40">Specification</th>
+            <tr id="table-header" class="border-b border-bp-600">
+              <th class="text-left py-4 px-4 text-bp-text-muted font-medium w-40">Specification</th>
             </tr>
           </thead>
           <tbody id="table-body">
@@ -85,38 +85,38 @@ const description = 'Compare specifications side-by-side for screws, bolts, anch
 
     <!-- Empty State -->
     <div id="empty-state" class="text-center py-16">
-      <div class="mx-auto w-24 h-24 bg-zinc-800 rounded-full flex items-center justify-center mb-6">
-        <svg class="w-12 h-12 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="mx-auto w-24 h-24 bg-bp-800 rounded-full flex items-center justify-center mb-6">
+        <svg class="w-12 h-12 text-bp-text-faint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
         </svg>
       </div>
       <h2 class="text-xl font-semibold mb-2">Select fasteners to compare</h2>
-      <p class="text-zinc-400 max-w-md mx-auto">
+      <p class="text-bp-text-muted max-w-md mx-auto">
         Choose at least two fasteners from the dropdowns above to see their specifications compared side-by-side.
       </p>
     </div>
 
     <!-- Popular Comparisons -->
-    <div class="mt-12 border-t border-zinc-800 pt-8">
+    <div class="mt-12 border-t border-bp-700 pt-8">
       <h2 class="text-xl font-semibold mb-4">Popular Comparisons</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <a href="/compare?a=wood-screw&b=drywall-screw" class="block p-4 border border-zinc-800 rounded-lg bg-zinc-900/50 hover:border-primary-600 transition-colors">
-          <span class="text-primary-400">Wood Screw</span> vs <span class="text-primary-400">Drywall Screw</span>
+        <a href="/compare?a=wood-screw&b=drywall-screw" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
+          <span class="text-accent-400">Wood Screw</span> vs <span class="text-accent-400">Drywall Screw</span>
         </a>
-        <a href="/compare?a=hex-bolt&b=carriage-bolt" class="block p-4 border border-zinc-800 rounded-lg bg-zinc-900/50 hover:border-primary-600 transition-colors">
-          <span class="text-primary-400">Hex Bolt</span> vs <span class="text-primary-400">Carriage Bolt</span>
+        <a href="/compare?a=hex-bolt&b=carriage-bolt" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
+          <span class="text-accent-400">Hex Bolt</span> vs <span class="text-accent-400">Carriage Bolt</span>
         </a>
-        <a href="/compare?a=toggle-bolt&b=molly-bolt" class="block p-4 border border-zinc-800 rounded-lg bg-zinc-900/50 hover:border-primary-600 transition-colors">
-          <span class="text-primary-400">Toggle Bolt</span> vs <span class="text-primary-400">Molly Bolt</span>
+        <a href="/compare?a=toggle-bolt&b=molly-bolt" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
+          <span class="text-accent-400">Toggle Bolt</span> vs <span class="text-accent-400">Molly Bolt</span>
         </a>
-        <a href="/compare?a=lock-nut&b=hex-nut" class="block p-4 border border-zinc-800 rounded-lg bg-zinc-900/50 hover:border-primary-600 transition-colors">
-          <span class="text-primary-400">Lock Nut</span> vs <span class="text-primary-400">Hex Nut</span>
+        <a href="/compare?a=lock-nut&b=hex-nut" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
+          <span class="text-accent-400">Lock Nut</span> vs <span class="text-accent-400">Hex Nut</span>
         </a>
-        <a href="/compare?a=flat-washer&b=lock-washer" class="block p-4 border border-zinc-800 rounded-lg bg-zinc-900/50 hover:border-primary-600 transition-colors">
-          <span class="text-primary-400">Flat Washer</span> vs <span class="text-primary-400">Lock Washer</span>
+        <a href="/compare?a=flat-washer&b=lock-washer" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
+          <span class="text-accent-400">Flat Washer</span> vs <span class="text-accent-400">Lock Washer</span>
         </a>
-        <a href="/compare?a=wedge-anchor&b=sleeve-anchor" class="block p-4 border border-zinc-800 rounded-lg bg-zinc-900/50 hover:border-primary-600 transition-colors">
-          <span class="text-primary-400">Wedge Anchor</span> vs <span class="text-primary-400">Sleeve Anchor</span>
+        <a href="/compare?a=wedge-anchor&b=sleeve-anchor" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
+          <span class="text-accent-400">Wedge Anchor</span> vs <span class="text-accent-400">Sleeve Anchor</span>
         </a>
       </div>
     </div>
@@ -225,11 +225,11 @@ const description = 'Compare specifications side-by-side for screws, bolts, anch
 
       // Build header
       const header = document.getElementById('table-header');
-      header.innerHTML = '<th class="text-left py-4 px-4 text-zinc-400 font-medium w-40">Specification</th>';
+      header.innerHTML = '<th class="text-left py-4 px-4 text-bp-text-muted font-medium w-40">Specification</th>';
       fasteners.forEach(f => {
         const th = document.createElement('th');
-        th.className = 'text-left py-4 px-4 text-zinc-100 font-semibold';
-        th.innerHTML = `<a href="/${f.category}s/${f.slug}" class="hover:text-primary-400 transition-colors">${f.name}</a>`;
+        th.className = 'text-left py-4 px-4 text-bp-text font-semibold';
+        th.innerHTML = `<a href="/${f.category}s/${f.slug}" class="hover:text-accent-400 transition-colors">${f.name}</a>`;
         header.appendChild(th);
       });
 
@@ -242,16 +242,16 @@ const description = 'Compare specifications side-by-side for screws, bolts, anch
         const differs = valuesDiffer(values);
 
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-zinc-800';
+        tr.className = 'border-b border-bp-700';
 
         const labelTd = document.createElement('td');
-        labelTd.className = 'py-4 px-4 text-zinc-400 font-medium align-top';
+        labelTd.className = 'py-4 px-4 text-bp-text-muted font-medium align-top';
         labelTd.textContent = row.label;
         tr.appendChild(labelTd);
 
         fasteners.forEach((f, i) => {
           const td = document.createElement('td');
-          td.className = `py-4 px-4 text-zinc-300 align-top ${differs ? 'bg-primary-950/20' : ''}`;
+          td.className = `py-4 px-4 text-bp-text align-top ${differs ? 'bg-accent-600/10' : ''}`;
 
           if (row.key === 'description') {
             td.className += ' text-sm';

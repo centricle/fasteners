@@ -26,19 +26,19 @@ const { title, description = "Comprehensive fastener specifications database - s
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
-    <header class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-50">
+    <header class="border-b border-bp-700 bg-bp-900/60 backdrop-blur-sm sticky top-0 z-50">
       <nav class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <a href="/" class="text-xl font-bold text-primary-400 hover:text-primary-300 transition-colors">
-          fasteners.fyi
+        <a href="/" class="text-xl font-bold hover:text-accent-300 transition-colors">
+          <span class="text-accent-400">fasteners</span><span class="text-white">.fyi</span>
         </a>
         <div class="flex gap-6 text-sm">
-          <a href="/screws" class="text-zinc-400 hover:text-zinc-100 transition-colors">Screws</a>
-          <a href="/bolts" class="text-zinc-400 hover:text-zinc-100 transition-colors">Bolts</a>
-          <a href="/anchors" class="text-zinc-400 hover:text-zinc-100 transition-colors">Anchors</a>
-          <a href="/nuts" class="text-zinc-400 hover:text-zinc-100 transition-colors">Nuts</a>
-          <a href="/washers" class="text-zinc-400 hover:text-zinc-100 transition-colors">Washers</a>
-          <a href="/search" class="text-zinc-400 hover:text-zinc-100 transition-colors">Search</a>
-          <a href="/compare" class="text-zinc-400 hover:text-zinc-100 transition-colors">Compare</a>
+          <a href="/screws" class="text-bp-text-muted hover:text-bp-text transition-colors">Screws</a>
+          <a href="/bolts" class="text-bp-text-muted hover:text-bp-text transition-colors">Bolts</a>
+          <a href="/anchors" class="text-bp-text-muted hover:text-bp-text transition-colors">Anchors</a>
+          <a href="/nuts" class="text-bp-text-muted hover:text-bp-text transition-colors">Nuts</a>
+          <a href="/washers" class="text-bp-text-muted hover:text-bp-text transition-colors">Washers</a>
+          <a href="/search" class="text-bp-text-muted hover:text-bp-text transition-colors">Search</a>
+          <a href="/compare" class="text-bp-text-muted hover:text-bp-text transition-colors">Compare</a>
         </div>
       </nav>
     </header>
@@ -47,8 +47,8 @@ const { title, description = "Comprehensive fastener specifications database - s
       <slot />
     </main>
 
-    <footer class="border-t border-zinc-800 mt-auto">
-      <div class="max-w-6xl mx-auto px-4 py-8 text-center text-zinc-500 text-sm">
+    <footer class="border-t border-bp-700 mt-auto">
+      <div class="max-w-6xl mx-auto px-4 py-8 text-center text-bp-text-faint text-sm">
         <p>&copy; {new Date().getFullYear()} fasteners.fyi</p>
         <p class="mt-2">Open source fastener specifications database. MIT License.</p>
         <div class="mt-4 flex justify-center">

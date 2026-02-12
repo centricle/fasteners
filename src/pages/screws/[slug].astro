@@ -82,14 +82,14 @@ function formatHeadStyle(head: string | undefined): string {
     <nav class="mb-8 flex text-sm" aria-label="Breadcrumb">
       <ol class="inline-flex items-center space-x-2">
         <li>
-          <a href="/" class="text-zinc-400 hover:text-zinc-100">Home</a>
+          <a href="/" class="text-bp-text-muted hover:text-bp-text">Home</a>
         </li>
-        <li class="text-zinc-600">/</li>
+        <li class="text-bp-text-faint">/</li>
         <li>
-          <a href="/screws" class="text-zinc-400 hover:text-zinc-100">Screws</a>
+          <a href="/screws" class="text-bp-text-muted hover:text-bp-text">Screws</a>
         </li>
-        <li class="text-zinc-600">/</li>
-        <li class="text-zinc-300">{screw.name}</li>
+        <li class="text-bp-text-faint">/</li>
+        <li class="text-bp-text">{screw.name}</li>
       </ol>
     </nav>
 
@@ -97,35 +97,35 @@ function formatHeadStyle(head: string | undefined): string {
       <!-- Main Content -->
       <div class="lg:col-span-2 space-y-8">
         <div class="flex items-start gap-6">
-          <FastenerIcon slug={screw.slug} category="screws" class="w-20 shrink-0 text-zinc-400" />
+          <FastenerIcon slug={screw.slug} category="screws" class="w-20 shrink-0 text-bp-text-muted" />
           <div>
             <h1 class="text-4xl font-bold mb-4">{screw.name}</h1>
             {screw.aliases && screw.aliases.length > 0 && (
-              <p class="text-zinc-400 mb-4">Also known as: {screw.aliases.join(', ')}</p>
+              <p class="text-bp-text-muted mb-4">Also known as: {screw.aliases.join(', ')}</p>
             )}
-            <p class="text-lg text-zinc-300">{screw.description}</p>
+            <p class="text-lg text-bp-text">{screw.description}</p>
           </div>
         </div>
 
         <!-- Quick Specs -->
-        <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+        <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
           <h2 class="text-xl font-semibold mb-4">Quick Specifications</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="text-center">
-              <p class="text-sm text-zinc-500 mb-1">Head Style</p>
+              <p class="text-sm text-bp-text-faint mb-1">Head Style</p>
               <p class="text-lg font-semibold">{formatHeadStyle(screw.headStyle)}</p>
             </div>
             <div class="text-center">
-              <p class="text-sm text-zinc-500 mb-1">Drive Type</p>
+              <p class="text-sm text-bp-text-faint mb-1">Drive Type</p>
               <p class="text-lg font-semibold">{formatDriveType(screw.driveType)}</p>
             </div>
             <div class="text-center">
-              <p class="text-sm text-zinc-500 mb-1">Thread Type</p>
+              <p class="text-sm text-bp-text-faint mb-1">Thread Type</p>
               <p class="text-lg font-semibold">{formatDriveType(screw.threadType)}</p>
             </div>
             {screw.pointType && (
               <div class="text-center">
-                <p class="text-sm text-zinc-500 mb-1">Point Type</p>
+                <p class="text-sm text-bp-text-faint mb-1">Point Type</p>
                 <p class="text-lg font-semibold">{formatDriveType(screw.pointType)}</p>
               </div>
             )}
@@ -133,34 +133,34 @@ function formatHeadStyle(head: string | undefined): string {
         </div>
 
         <!-- Dimensions -->
-        <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+        <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
           <h2 class="text-xl font-semibold mb-4">Dimensions</h2>
           <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {screw.diameterRange && (
               <div>
-                <dt class="text-sm text-zinc-500">Diameter Range</dt>
+                <dt class="text-sm text-bp-text-faint">Diameter Range</dt>
                 <dd class="text-lg">{formatRange(screw.diameterRange)}</dd>
               </div>
             )}
             {screw.lengthRange && (
               <div>
-                <dt class="text-sm text-zinc-500">Length Range</dt>
+                <dt class="text-sm text-bp-text-faint">Length Range</dt>
                 <dd class="text-lg">{formatRange(screw.lengthRange)}</dd>
               </div>
             )}
             <div>
-              <dt class="text-sm text-zinc-500">Measurement System</dt>
+              <dt class="text-sm text-bp-text-faint">Measurement System</dt>
               <dd class="text-lg">{screw.measurementSystem.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(', ')}</dd>
             </div>
           </dl>
         </div>
 
         <!-- Materials -->
-        <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+        <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
           <h2 class="text-xl font-semibold mb-4">Available Materials</h2>
           <div class="flex flex-wrap gap-2">
             {screw.materials.map((material) => (
-              <span class="px-3 py-1 rounded-full bg-zinc-800 text-zinc-300 text-sm">
+              <span class="px-3 py-1 rounded-full bg-bp-800 text-bp-text text-sm">
                 {material.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </span>
             ))}
@@ -169,11 +169,11 @@ function formatHeadStyle(head: string | undefined): string {
 
         <!-- Standards -->
         {screw.standards && screw.standards.length > 0 && (
-          <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+          <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
             <h2 class="text-xl font-semibold mb-4">Standards</h2>
             <div class="flex flex-wrap gap-2">
               {screw.standards.map((standard) => (
-                <span class="px-3 py-1 rounded border border-zinc-700 text-zinc-300 text-sm font-mono">
+                <span class="px-3 py-1 rounded border border-bp-600 text-bp-text text-sm font-mono">
                   {standard}
                 </span>
               ))}
@@ -185,9 +185,9 @@ function formatHeadStyle(head: string | undefined): string {
       <!-- Sidebar -->
       <div class="space-y-6">
         <!-- Applications -->
-        <div class="border border-zinc-800 rounded-lg p-6 bg-blue-950/30">
+        <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/40">
           <h3 class="text-lg font-semibold mb-4">Common Applications</h3>
-          <ul class="space-y-2 text-zinc-300">
+          <ul class="space-y-2 text-bp-text">
             {screw.applications.map((app) => (
               <li class="flex items-start gap-2">
                 <span class="text-green-500 mt-1">+</span>
@@ -199,9 +199,9 @@ function formatHeadStyle(head: string | undefined): string {
 
         <!-- Not Recommended -->
         {screw.notRecommendedFor && screw.notRecommendedFor.length > 0 && (
-          <div class="border border-zinc-800 rounded-lg p-6 bg-red-950/20">
+          <div class="border border-bp-700 rounded-lg p-6 bg-red-950/30">
             <h3 class="text-lg font-semibold mb-4">Not Recommended For</h3>
-            <ul class="space-y-2 text-zinc-300">
+            <ul class="space-y-2 text-bp-text">
               {screw.notRecommendedFor.map((item) => (
                 <li class="flex items-start gap-2">
                   <span class="text-red-500 mt-1">-</span>
@@ -214,11 +214,11 @@ function formatHeadStyle(head: string | undefined): string {
 
         <!-- Related Fasteners -->
         {screw.relatedFasteners && screw.relatedFasteners.length > 0 && (
-          <div class="border border-zinc-800 rounded-lg p-6 bg-zinc-900/50">
+          <div class="border border-bp-700 rounded-lg p-6 bg-bp-900/60">
             <h3 class="text-lg font-semibold mb-4">Related Fasteners</h3>
             <div class="flex flex-wrap gap-2">
               {screw.relatedFasteners.map((slug) => (
-                <a href={`/screws/${slug}`} class="px-3 py-1 rounded bg-zinc-800 text-primary-400 hover:bg-zinc-700 text-sm transition-colors">
+                <a href={`/screws/${slug}`} class="px-3 py-1 rounded bg-bp-800 text-accent-400 hover:bg-bp-700 text-sm transition-colors">
                   {slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </a>
               ))}
