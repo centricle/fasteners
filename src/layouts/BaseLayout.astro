@@ -16,6 +16,22 @@ const { title, description = "Comprehensive fastener specifications database - s
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | fasteners.fyi</title>
 
+    <!-- Open Graph -->
+    <meta property="og:title" content={`${title} | fasteners.fyi`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:site_name" content="fasteners.fyi" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={`${title} | fasteners.fyi`} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- SEO -->
+    <link rel="canonical" href={Astro.url} />
+    <meta name="robots" content="index, follow" />
+
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7YTFBKYLFW"></script>
     <script is:inline>
