@@ -30,5 +30,78 @@ import { anchors } from '../utils/data';
         </a>
       ))}
     </div>
+
+    <section class="mt-16">
+      <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">How do I choose the right anchor for drywall?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">For light loads (under 15 lbs), plastic expansion anchors are sufficient. For medium loads (15-50 lbs), self-drilling drywall anchors or molly bolts work well. For heavy loads (50+ lbs), toggle bolts or snap toggles are required, as they spread the load across a larger area behind the drywall.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What is the difference between a wedge anchor and a sleeve anchor?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Both are concrete anchors, but they differ in mechanism. Wedge anchors expand a clip at the bottom of the hole as the nut is tightened, providing the highest holding values in solid concrete. Sleeve anchors expand along the full length of the anchor body, making them suitable for concrete, brick, and block — including hollow sections where wedge anchors would fail.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">Can I remove and reuse concrete anchors?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Most mechanical concrete anchors (wedge, drop-in, split drive) are permanent and cannot be fully removed. The expanded portion remains embedded in the concrete. Sleeve anchors and tapcon screws can sometimes be removed, but the hole is compromised for reinstallation at the same size. Chemical anchors are also permanent once cured.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">How deep should I drill for a concrete anchor?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Minimum embedment depth varies by anchor type and diameter but is typically at least 4-5 times the anchor diameter. The drilled hole should be 1/2" deeper than the embedment depth to allow space for dust. Always use a hammer drill with a carbide-tipped masonry bit matching the anchor's specified hole diameter.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What is the difference between a toggle bolt and a molly bolt?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Toggle bolts use spring-loaded wings that open behind the wall, providing high load capacity (up to 300+ lbs depending on size). The wings fall behind the wall if the bolt is removed. Molly bolts use a split sleeve that expands against the back of the drywall when tightened. Molly bolts stay in place when the screw is removed, allowing reuse of the same hole.</div>
+        </details>
+      </div>
+    </section>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I choose the right anchor for drywall?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For light loads (under 15 lbs), plastic expansion anchors are sufficient. For medium loads (15-50 lbs), self-drilling drywall anchors or molly bolts work well. For heavy loads (50+ lbs), toggle bolts or snap toggles are required, as they spread the load across a larger area behind the drywall."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between a wedge anchor and a sleeve anchor?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Both are concrete anchors, but they differ in mechanism. Wedge anchors expand a clip at the bottom of the hole as the nut is tightened, providing the highest holding values in solid concrete. Sleeve anchors expand along the full length of the anchor body, making them suitable for concrete, brick, and block — including hollow sections where wedge anchors would fail."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I remove and reuse concrete anchors?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most mechanical concrete anchors (wedge, drop-in, split drive) are permanent and cannot be fully removed. The expanded portion remains embedded in the concrete. Sleeve anchors and tapcon screws can sometimes be removed, but the hole is compromised for reinstallation at the same size. Chemical anchors are also permanent once cured."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How deep should I drill for a concrete anchor?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Minimum embedment depth varies by anchor type and diameter but is typically at least 4-5 times the anchor diameter. The drilled hole should be 1/2\" deeper than the embedment depth to allow space for dust. Always use a hammer drill with a carbide-tipped masonry bit matching the anchor's specified hole diameter."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between a toggle bolt and a molly bolt?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Toggle bolts use spring-loaded wings that open behind the wall, providing high load capacity (up to 300+ lbs depending on size). The wings fall behind the wall if the bolt is removed. Molly bolts use a split sleeve that expands against the back of the drywall when tightened. Molly bolts stay in place when the screw is removed, allowing reuse of the same hole."
+        }
+      }
+    ]
+  })} />
 </BaseLayout>

@@ -30,5 +30,78 @@ import { washers } from '../utils/data';
         </a>
       ))}
     </div>
+
+    <section class="mt-16">
+      <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">Do I always need a washer with a bolt?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Not always, but washers are recommended in most applications. They distribute the clamping load over a larger area, prevent surface damage, and provide a consistent bearing surface for the nut or bolt head. Washers are especially important on soft materials (wood, aluminum, plastic) where the fastener head could pull through or crush the surface.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What is the difference between a flat washer and a fender washer?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Fender washers have a much larger outer diameter relative to the hole size compared to standard flat washers. This extra surface area spreads the load over a wider area, making them ideal for thin or soft materials where a standard washer might pull through. They are commonly used in automotive body panels, sheet metal, and drywall applications.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">Do lock washers actually prevent loosening?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Split lock washers (helical spring washers) are the most common type, but testing by the Junker vibration test shows they provide minimal anti-loosening benefit compared to a properly torqued plain washer. For reliable vibration resistance, Nord-Lock wedge-locking washers, thread-locking adhesive, or prevailing torque nuts are more effective solutions.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What size washer do I need for a given bolt?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Washer sizing is based on the bolt diameter. The washer's inner diameter should be slightly larger than the bolt shank — typically 1/16" larger for imperial sizes. For example, a 1/2" bolt uses a washer with a 9/16" inner diameter. Standard washer outer diameters and thicknesses are defined by SAE (narrow) and USS (wide) specifications for imperial, and ISO 7089/7093 for metric.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">When should I use a Belleville washer?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Belleville washers (conical spring washers) maintain tension in a bolted joint by acting as a spring. They compensate for thermal expansion, settling, and relaxation of the clamped materials. Use them in applications requiring consistent clamping force over time — such as flanged pipe connections, electrical connections, and high-temperature assemblies where differential expansion occurs.</div>
+        </details>
+      </div>
+    </section>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do I always need a washer with a bolt?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not always, but washers are recommended in most applications. They distribute the clamping load over a larger area, prevent surface damage, and provide a consistent bearing surface for the nut or bolt head. Washers are especially important on soft materials (wood, aluminum, plastic) where the fastener head could pull through or crush the surface."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between a flat washer and a fender washer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Fender washers have a much larger outer diameter relative to the hole size compared to standard flat washers. This extra surface area spreads the load over a wider area, making them ideal for thin or soft materials where a standard washer might pull through. They are commonly used in automotive body panels, sheet metal, and drywall applications."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do lock washers actually prevent loosening?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Split lock washers (helical spring washers) are the most common type, but testing by the Junker vibration test shows they provide minimal anti-loosening benefit compared to a properly torqued plain washer. For reliable vibration resistance, Nord-Lock wedge-locking washers, thread-locking adhesive, or prevailing torque nuts are more effective solutions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What size washer do I need for a given bolt?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Washer sizing is based on the bolt diameter. The washer's inner diameter should be slightly larger than the bolt shank — typically 1/16\" larger for imperial sizes. For example, a 1/2\" bolt uses a washer with a 9/16\" inner diameter. Standard washer outer diameters and thicknesses are defined by SAE (narrow) and USS (wide) specifications for imperial, and ISO 7089/7093 for metric."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use a Belleville washer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Belleville washers (conical spring washers) maintain tension in a bolted joint by acting as a spring. They compensate for thermal expansion, settling, and relaxation of the clamped materials. Use them in applications requiring consistent clamping force over time — such as flanged pipe connections, electrical connections, and high-temperature assemblies where differential expansion occurs."
+        }
+      }
+    ]
+  })} />
 </BaseLayout>

@@ -30,5 +30,78 @@ import { bolts } from '../utils/data';
         </a>
       ))}
     </div>
+
+    <section class="mt-16">
+      <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What is the difference between a bolt and a screw?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">By general convention, a bolt passes through an unthreaded hole and is secured with a nut on the opposite side. A screw threads directly into a tapped hole or material. However, usage varies by industry — ASME defines the distinction based on how the fastener is tightened (by the nut vs by the head).</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What do bolt grade markings mean?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Grade markings on bolt heads indicate tensile strength. Grade 2 (no marks) is standard low-carbon steel. Grade 5 (three radial lines) is medium-carbon quenched and tempered steel with 120,000 PSI tensile strength. Grade 8 (six radial lines) is high-strength alloy steel at 150,000 PSI. Metric bolts use a numerical system (e.g., 8.8, 10.9, 12.9).</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">When should I use a carriage bolt vs a hex bolt?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Carriage bolts have a smooth, dome-shaped head with a square shoulder beneath that locks into the wood to prevent spinning. They are used when a finished appearance is needed or when the bolt head should not be removable with a wrench. Hex bolts are tightened from the head side with a wrench and are used in structural and mechanical applications where higher torque is required.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What is the difference between coarse and fine thread bolts?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Coarse thread (UNC) bolts have fewer threads per inch, are more resistant to cross-threading, and are standard for general-purpose use. Fine thread (UNF) bolts have more threads per inch, providing higher tensile strength and better resistance to vibration loosening. Fine threads are common in automotive and aerospace applications.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">How do I measure bolt length?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Bolt length is measured from the bearing surface (underside of the head) to the end of the shank. For hex bolts and most standard bolts, this means the head is not included in the length. Exceptions include countersunk bolts (e.g., flat head), where length is measured from the top of the head since it sits flush with the surface.</div>
+        </details>
+      </div>
+    </section>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between a bolt and a screw?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "By general convention, a bolt passes through an unthreaded hole and is secured with a nut on the opposite side. A screw threads directly into a tapped hole or material. However, usage varies by industry — ASME defines the distinction based on how the fastener is tightened (by the nut vs by the head)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What do bolt grade markings mean?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Grade markings on bolt heads indicate tensile strength. Grade 2 (no marks) is standard low-carbon steel. Grade 5 (three radial lines) is medium-carbon quenched and tempered steel with 120,000 PSI tensile strength. Grade 8 (six radial lines) is high-strength alloy steel at 150,000 PSI. Metric bolts use a numerical system (e.g., 8.8, 10.9, 12.9)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use a carriage bolt vs a hex bolt?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Carriage bolts have a smooth, dome-shaped head with a square shoulder beneath that locks into the wood to prevent spinning. They are used when a finished appearance is needed or when the bolt head should not be removable with a wrench. Hex bolts are tightened from the head side with a wrench and are used in structural and mechanical applications where higher torque is required."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between coarse and fine thread bolts?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Coarse thread (UNC) bolts have fewer threads per inch, are more resistant to cross-threading, and are standard for general-purpose use. Fine thread (UNF) bolts have more threads per inch, providing higher tensile strength and better resistance to vibration loosening. Fine threads are common in automotive and aerospace applications."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I measure bolt length?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Bolt length is measured from the bearing surface (underside of the head) to the end of the shank. For hex bolts and most standard bolts, this means the head is not included in the length. Exceptions include countersunk bolts (e.g., flat head), where length is measured from the top of the head since it sits flush with the surface."
+        }
+      }
+    ]
+  })} />
 </BaseLayout>

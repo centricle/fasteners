@@ -30,5 +30,78 @@ import { screws } from '../utils/data';
         </a>
       ))}
     </div>
+
+    <section class="mt-16">
+      <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What is the difference between wood screws and machine screws?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Wood screws have a tapered shank with coarse threads designed to cut into wood fibers. Machine screws have a uniform diameter with finer threads and require a pre-tapped hole or nut. Wood screws are self-tapping in wood; machine screws are used in metal, plastic, or other materials with matching threaded holes.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What does the screw gauge number mean?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Screw gauge refers to the diameter of the screw shaft. Common gauges range from #2 (0.086") to #14 (0.242"). Higher numbers indicate larger diameters. For screws 1/4" and above, the diameter is stated as a fraction rather than a gauge number.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">When should I use self-tapping vs self-drilling screws?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Self-tapping screws create their own threads in a pre-drilled pilot hole. Self-drilling screws have a drill-bit tip that eliminates the need for a pilot hole entirely. Use self-tapping screws in softer materials like wood or plastic. Use self-drilling screws for sheet metal or steel framing where drilling and fastening in one step saves time.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What drive type is strongest: Phillips, Torx, or Robertson?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Robertson (square) and Torx (star) drives resist cam-out better than Phillips, allowing more torque transfer. Torx provides the highest torque capacity due to its six-lobe contact area. Phillips was intentionally designed to cam out at a set torque to prevent over-tightening, which is a disadvantage when maximum clamping force is needed.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What screw material should I use outdoors?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Stainless steel (304 or 316) resists corrosion in most outdoor environments. For pressure-treated lumber, use screws rated ACQ-compatible — typically stainless steel or specially coated screws. Avoid plain steel or zinc-plated screws outdoors, as they corrode rapidly. Silicon bronze is preferred for marine applications.</div>
+        </details>
+      </div>
+    </section>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between wood screws and machine screws?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Wood screws have a tapered shank with coarse threads designed to cut into wood fibers. Machine screws have a uniform diameter with finer threads and require a pre-tapped hole or nut. Wood screws are self-tapping in wood; machine screws are used in metal, plastic, or other materials with matching threaded holes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does the screw gauge number mean?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Screw gauge refers to the diameter of the screw shaft. Common gauges range from #2 (0.086\") to #14 (0.242\"). Higher numbers indicate larger diameters. For screws 1/4\" and above, the diameter is stated as a fraction rather than a gauge number."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use self-tapping vs self-drilling screws?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Self-tapping screws create their own threads in a pre-drilled pilot hole. Self-drilling screws have a drill-bit tip that eliminates the need for a pilot hole entirely. Use self-tapping screws in softer materials like wood or plastic. Use self-drilling screws for sheet metal or steel framing where drilling and fastening in one step saves time."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What drive type is strongest: Phillips, Torx, or Robertson?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Robertson (square) and Torx (star) drives resist cam-out better than Phillips, allowing more torque transfer. Torx provides the highest torque capacity due to its six-lobe contact area. Phillips was intentionally designed to cam out at a set torque to prevent over-tightening, which is a disadvantage when maximum clamping force is needed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What screw material should I use outdoors?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Stainless steel (304 or 316) resists corrosion in most outdoor environments. For pressure-treated lumber, use screws rated ACQ-compatible — typically stainless steel or specially coated screws. Avoid plain steel or zinc-plated screws outdoors, as they corrode rapidly. Silicon bronze is preferred for marine applications."
+        }
+      }
+    ]
+  })} />
 </BaseLayout>

@@ -30,5 +30,78 @@ import { nuts } from '../utils/data';
         </a>
       ))}
     </div>
+
+    <section class="mt-16">
+      <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What is the difference between a lock nut and a regular hex nut?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">A regular hex nut relies solely on thread friction and clamping force to stay in place. Lock nuts have an additional locking mechanism — either a nylon insert (nyloc) that grips the bolt threads, or a prevailing torque design with a deformed top section. Lock nuts resist loosening from vibration and are used in automotive, machinery, and structural applications.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">Can I reuse nylon lock nuts?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Nylon lock nuts (nyloc) lose locking effectiveness after repeated installation and removal. The nylon insert deforms to grip the bolt threads, and this deformation reduces with each use. Most manufacturers recommend single-use for critical applications. For non-critical applications, they may be reused 2-3 times if the nylon insert still provides noticeable resistance during threading.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What is a castle nut used for?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Castle nuts (also called castellated nuts) have slots cut into the top that align with a hole in the bolt. A cotter pin is inserted through the slot and bolt hole to positively lock the nut in place. They are used in safety-critical applications such as steering linkages, wheel bearings, and aircraft assemblies where the nut must never loosen.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">When should I use a flange nut instead of a nut with a washer?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Flange nuts have a built-in washer (flange) at the base that distributes load and prevents the nut from pulling through soft materials. They eliminate the need for a separate washer, reducing parts count and assembly time. Serrated flange nuts also provide vibration resistance. Use them in automotive and assembly-line applications where speed and reliability matter.</div>
+        </details>
+        <details class="border border-bp-700 rounded-lg bg-bp-900/60">
+          <summary class="px-6 py-4 cursor-pointer text-lg font-medium hover:text-accent-400 transition-colors">What size wrench do I need for a given nut?</summary>
+          <div class="px-6 pb-4 text-bp-text-muted">Wrench size corresponds to the width across flats (WAF) of the nut, not the thread size. For imperial nuts, common pairings: 1/4" bolt = 7/16" wrench, 5/16" bolt = 1/2" wrench, 3/8" bolt = 9/16" wrench, 1/2" bolt = 3/4" wrench. For metric: M6 = 10mm, M8 = 13mm, M10 = 17mm, M12 = 19mm. Always verify — some standards differ.</div>
+        </details>
+      </div>
+    </section>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between a lock nut and a regular hex nut?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A regular hex nut relies solely on thread friction and clamping force to stay in place. Lock nuts have an additional locking mechanism — either a nylon insert (nyloc) that grips the bolt threads, or a prevailing torque design with a deformed top section. Lock nuts resist loosening from vibration and are used in automotive, machinery, and structural applications."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I reuse nylon lock nuts?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nylon lock nuts (nyloc) lose locking effectiveness after repeated installation and removal. The nylon insert deforms to grip the bolt threads, and this deformation reduces with each use. Most manufacturers recommend single-use for critical applications. For non-critical applications, they may be reused 2-3 times if the nylon insert still provides noticeable resistance during threading."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a castle nut used for?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Castle nuts (also called castellated nuts) have slots cut into the top that align with a hole in the bolt. A cotter pin is inserted through the slot and bolt hole to positively lock the nut in place. They are used in safety-critical applications such as steering linkages, wheel bearings, and aircraft assemblies where the nut must never loosen."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use a flange nut instead of a nut with a washer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Flange nuts have a built-in washer (flange) at the base that distributes load and prevents the nut from pulling through soft materials. They eliminate the need for a separate washer, reducing parts count and assembly time. Serrated flange nuts also provide vibration resistance. Use them in automotive and assembly-line applications where speed and reliability matter."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What size wrench do I need for a given nut?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Wrench size corresponds to the width across flats (WAF) of the nut, not the thread size. For imperial nuts, common pairings: 1/4\" bolt = 7/16\" wrench, 5/16\" bolt = 1/2\" wrench, 3/8\" bolt = 9/16\" wrench, 1/2\" bolt = 3/4\" wrench. For metric: M6 = 10mm, M8 = 13mm, M10 = 17mm, M12 = 19mm. Always verify — some standards differ."
+        }
+      }
+    ]
+  })} />
 </BaseLayout>
