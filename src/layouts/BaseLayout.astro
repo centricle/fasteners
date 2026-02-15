@@ -64,12 +64,10 @@ const { title, description = "Comprehensive fastener specifications database - s
     </main>
 
     <footer class="border-t border-bp-700 mt-auto">
-      <div class="max-w-6xl mx-auto px-4 py-8 text-center text-bp-text-faint text-sm">
-        <p>&copy; {new Date().getFullYear()} fasteners.fyi</p>
-        <p class="mt-2">Open source fastener specifications database. MIT License.</p>
-        <div class="mt-4 flex justify-center">
+      <div class="max-w-6xl mx-auto px-4 relative py-8">
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <a href="https://centricle.com" title="Centricle" aria-label="Centricle" class="text-amber-500/70 hover:text-amber-500 transition-colors">
-            <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g transform="rotate(-5, 16, 16)">
                 <path d="M 11.5 3 L 11.3 8.5 L 11.6 16 L 11.4 23.5 L 11.5 29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M 11.6 16 L 16 11 L 22.5 4.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -78,6 +76,9 @@ const { title, description = "Comprehensive fastener specifications database - s
               </g>
             </svg>
           </a>
+        </div>
+        <div class="flex items-center justify-between text-sm text-bp-text-faint">
+          <span>&copy; {new Date().getFullYear()} fasteners.fyi</span>
         </div>
       </div>
     </footer>
