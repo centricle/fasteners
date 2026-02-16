@@ -64,8 +64,9 @@ const { title, description = "Comprehensive fastener specifications database - s
     </main>
 
     <footer class="border-t border-bp-700 mt-auto">
-      <div class="max-w-6xl mx-auto px-4 relative py-8">
-        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="flex items-center justify-between text-sm text-bp-text-faint">
+          <span>&copy; {new Date().getFullYear()} fasteners.fyi</span>
           <a href="https://centricle.com" title="Centricle" aria-label="Centricle" class="text-amber-500/70 hover:text-amber-500 transition-colors">
             <svg class="w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g transform="rotate(-5, 16, 16)">
@@ -76,9 +77,6 @@ const { title, description = "Comprehensive fastener specifications database - s
               </g>
             </svg>
           </a>
-        </div>
-        <div class="flex items-center justify-between text-sm text-bp-text-faint">
-          <span>&copy; {new Date().getFullYear()} fasteners.fyi</span>
         </div>
       </div>
     </footer>
