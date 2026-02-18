@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" description="Why fasteners.fyi exists. The fastener spec reference that should already exist.">
+  <section class="py-12 sm:py-16">
+    <div class="max-w-3xl mx-auto px-4">
+      <h1 class="text-3xl font-semibold mb-8">About</h1>
+
+      <!-- Origin story -->
+      <div class="mb-10">
+        <p class="text-lg mb-4" style="color: var(--bp-text); opacity: 0.8;">
+          M6 or 1/4-20? Every trip to the hardware store starts with the same question. Metric or imperial, thread pitch, head type, grade — the specs exist in manufacturer catalogs, but good luck finding them when you're standing in the fastener aisle trying to match a bolt.
+        </p>
+        <p class="text-lg" style="color: var(--bp-text); opacity: 0.8;">
+          I built fasteners.fyi so the answer is one search away. Every fastener type, every spec, sourced from manufacturer datasheets and industry standards.
+        </p>
+      </div>
+
+      <!-- What it does -->
+      <h2 class="text-2xl font-semibold mb-4">What it does</h2>
+      <p class="text-bp-text-muted mb-10">
+        fasteners.fyi is a specification database for screws, bolts, anchors, nuts, and washers. Look up any fastener type and get dimensions, thread specs, strength grades, and material options. No opinions — just reliable technical data.
+      </p>
+
+      <!-- Built by -->
+      <div class="pt-8 border-t border-bp-700 text-sm text-bp-text-muted">
+        <p>
+          Built by <a href="https://centricle.com" class="text-accent-400 hover:text-accent-300 transition-colors">Kevin Smith</a> at Centricle. No ads. No sponsored content. No affiliate links.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
