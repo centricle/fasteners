@@ -55,7 +55,8 @@ const { title, description = "Comprehensive fastener specifications database - s
           </div>
           <span class="text-lg"><span class="text-accent-400">fasteners</span><span class="text-white font-bold">.fyi</span></span>
         </a>
-        <div class="flex gap-6 text-sm">
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex gap-6 text-sm">
           <a href="/screws" class="text-bp-text-muted hover:text-bp-text transition-colors">Screws</a>
           <a href="/bolts" class="text-bp-text-muted hover:text-bp-text transition-colors">Bolts</a>
           <a href="/anchors" class="text-bp-text-muted hover:text-bp-text transition-colors">Anchors</a>
@@ -65,7 +66,36 @@ const { title, description = "Comprehensive fastener specifications database - s
           <a href="/compare" class="text-bp-text-muted hover:text-bp-text transition-colors">Compare</a>
           <a href="/about" class="text-bp-text-muted hover:text-bp-text transition-colors">About</a>
         </div>
+
+        <!-- Mobile Menu Button -->
+        <button
+          class="md:hidden flex items-center justify-center w-10 h-10 text-bp-text-muted hover:text-bp-text"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          id="mobile-menu-button"
+        >
+          <svg class="w-6 h-6 hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5h16"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19h16"/>
+          </svg>
+          <svg class="w-6 h-6 close-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6 6 18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 6 12 12"/>
+          </svg>
+        </button>
       </nav>
+
+      <!-- Mobile Navigation Menu -->
+      <div class="md:hidden hidden" id="mobile-menu">
+        <div class="px-4 pt-2 pb-3 space-y-1 border-t border-bp-700">
+          <a href="/screws" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Screws</a>
+          <a href="/bolts" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Bolts</a>
+          <a href="/anchors" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Anchors</a>
+          <a href="/nuts" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Nuts</a>
+          <a href="/washers" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Washers</a>
+          <a href="/search" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Search</a>
+          <a href="/compare" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Compare</a>
+          <a href="/about" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">About</a>
+        </div>
+      </div>
     </header>
 
     <main class="flex-1">
@@ -92,6 +122,50 @@ const { title, description = "Comprehensive fastener specifications database - s
     </footer>
   </body>
 </html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+    if (!button || !menu) return;
+
+    const hamburgerIcon = button.querySelector('.hamburger-icon');
+    const closeIcon = button.querySelector('.close-icon');
+    let isOpen = false;
+
+    function toggleMenu() {
+      isOpen = !isOpen;
+      menu.classList.toggle('hidden', !isOpen);
+      button.setAttribute('aria-expanded', isOpen.toString());
+      button.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+      if (hamburgerIcon && closeIcon) {
+        hamburgerIcon.classList.toggle('hidden', isOpen);
+        closeIcon.classList.toggle('hidden', !isOpen);
+      }
+      if (isOpen) {
+        const firstLink = menu.querySelector('a');
+        if (firstLink) firstLink.focus();
+      } else {
+        button.focus();
+      }
+    }
+
+    function closeMenu() {
+      if (isOpen) toggleMenu();
+    }
+
+    button.addEventListener('click', toggleMenu);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isOpen) closeMenu();
+    });
+    document.addEventListener('click', function(e) {
+      if (isOpen && !menu.contains(e.target) && !button.contains(e.target)) closeMenu();
+    });
+    menu.addEventListener('click', function(e) {
+      if (e.target.tagName === 'A') closeMenu();
+    });
+  });
+</script>
 
 <style is:global>
   @import "../styles/global.css";
