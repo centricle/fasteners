@@ -1,15 +1,25 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { FASTENER_ICON_CATEGORIES, fastenerIconManifest, renderFastenerShapeIcon } from '../lib/fastener-icons';
+import {
+  FASTENER_ICON_CATEGORIES,
+  fastenerIconManifest,
+  getFastenerIconArtBoxStyle,
+  getFastenerIconFrameStyle,
+  getFastenerIconViewportStyle,
+  renderFastenerShapeIcon
+} from '../lib/fastener-icons';
 
 const sections = FASTENER_ICON_CATEGORIES.map((category) => ({
   category,
+  frameStyle: getFastenerIconFrameStyle('qa'),
+  viewportStyle: getFastenerIconViewportStyle(category, 'qa'),
+  artBoxStyle: getFastenerIconArtBoxStyle(category),
   icons: fastenerIconManifest
     .filter((entry) => entry.category === category)
     .map((entry) => ({
       ...entry,
       markup: renderFastenerShapeIcon(entry.shapeKey, {
-        className: 'w-16 h-auto text-bp-text-faint',
+        svgClassName: 'block h-full w-full text-bp-text-faint',
         title: entry.shapeKey,
         decorative: false,
       }),
@@ -35,7 +45,12 @@ const sections = FASTENER_ICON_CATEGORIES.map((category) => ({
           {section.icons.map((icon) => (
             <article class="rounded-lg border border-bp-700 bg-bp-900/60 p-4">
               <div class="flex justify-center items-center min-h-32">
-                {icon.markup && <Fragment set:html={icon.markup} />}
+                <div class="relative" style={section.frameStyle}>
+                  <div class="pointer-events-none absolute inset-0 rounded border border-bp-700/50"></div>
+                  <div class="pointer-events-none absolute rounded border border-bp-700/40" style={section.viewportStyle}></div>
+                  <div class="pointer-events-none absolute rounded border border-dashed border-accent-400/35" style={`${section.viewportStyle}; ${section.artBoxStyle}`}></div>
+                  {icon.markup && <Fragment set:html={icon.markup} />}
+                </div>
               </div>
               <div class="border-t border-bp-700 pt-3 space-y-1">
                 <p class="font-mono text-sm text-bp-text">{icon.shapeKey}</p>

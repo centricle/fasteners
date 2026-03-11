@@ -13,6 +13,8 @@ The fastener icon source of truth now lives in `icons/fasteners/`.
 - Primary geometry uses `currentColor`
 - Secondary detail uses `var(--fastener-icon-inset, currentColor)`
 - Raw SVG files intentionally do not include classes, sizing attributes, or framework-specific accessibility attributes
+- Raw SVG geometry is authored directly in the declared viewBox rather than being centered with a top-level translate wrapper
+- Render icons in a fixed bounding frame and let the SVG fill it with `preserveAspectRatio="xMidYMid meet"`
 
 ## Plain HTML
 

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 100" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 100" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" preserveAspectRatio="xMidYMid meet">
     <path d="M20 6 H40 V12 H20 Z" stroke="currentColor" stroke-width="2.5" />
     <path d="M27 12 V64 H33 V12" stroke="currentColor" stroke-width="2" />
     <path d="M4 64 H27 V78 H4 Z" stroke="currentColor" stroke-width="2.5" />

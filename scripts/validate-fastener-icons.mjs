@@ -26,6 +26,10 @@ function validateSvgContract(entry, svg) {
     fail(`${entry.shapeKey}: missing SVG namespace`);
   }
 
+  if (!svg.includes('preserveAspectRatio="xMidYMid meet"')) {
+    fail(`${entry.shapeKey}: missing preserveAspectRatio contract`);
+  }
+
   if (!svg.startsWith('<svg ') || !svg.trim().endsWith('</svg>')) {
     fail(`${entry.shapeKey}: SVG must start with <svg> and end with </svg>`);
   }
@@ -42,6 +46,10 @@ function validateSvgContract(entry, svg) {
 
   if (rootOpenTagMatch && /\s(?:width|height)=/.test(rootOpenTagMatch[1])) {
     fail(`${entry.shapeKey}: root SVG should not include width or height attributes`);
+  }
+
+  if (/<svg\b[^>]*>\s*<g\b[^>]*transform="translate\([^)]+\)"/.test(svg)) {
+    fail(`${entry.shapeKey}: canonical SVG should not use a top-level translate wrapper for centering`);
   }
 
   for (const match of svg.matchAll(/\b(?:stroke|fill)="([^"]+)"/g)) {

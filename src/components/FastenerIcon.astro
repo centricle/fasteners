@@ -1,16 +1,37 @@
 ---
-import { renderFastenerIcon, type FastenerIconCategory } from '../lib/fastener-icons';
+import { getFastenerIconFrameStyle, renderFastenerIcon } from '../lib/fastener-icons';
+import type { FastenerIconCategory, FastenerIconFrame } from '../lib/fastener-icons';
 
 interface Props {
   slug: string;
   category: FastenerIconCategory;
+  frame?: FastenerIconFrame;
   class?: string;
+  svgClass?: string;
   title?: string;
   decorative?: boolean;
 }
 
-const { slug, category, class: className = '', title, decorative = true } = Astro.props;
-const svgMarkup = renderFastenerIcon({ slug, category, className, title, decorative });
+const props = Astro.props as Props;
+const slug = props.slug;
+const category = props.category;
+const frame = props.frame ?? 'list';
+const className = props.class ?? '';
+const svgClass = props.svgClass ?? '';
+const title = props.title;
+const decorative = props.decorative ?? true;
+const svgMarkup = renderFastenerIcon({
+  slug,
+  category,
+  svgClassName: ['block h-full w-full', svgClass].filter(Boolean).join(' '),
+  title,
+  decorative,
+});
+const frameStyle = getFastenerIconFrameStyle(frame);
 ---
 
-{svgMarkup && <Fragment set:html={svgMarkup} />}
+{svgMarkup && (
+  <span class:list={['inline-flex items-center justify-center', className]} style={frameStyle}>
+    <Fragment set:html={svgMarkup} />
+  </span>
+)}
