@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FastenerIcon from '../../components/FastenerIcon.astro';
 import { washers } from '../../utils/data';
+import { canonicalFor } from '../../utils/canonical';
 import type { Washer } from '../../types/fastener';
 
 export function getStaticPaths() {
@@ -19,6 +20,7 @@ const { washer } = Astro.props;
 
 const title = `${washer.name} Specifications`;
 const description = washer.description;
+const canonical = canonicalFor('washers', washer.slug);
 
 // Format dimension range for display
 function formatRange(range: { min: number; max: number; unit: string } | undefined): string {
@@ -33,7 +35,7 @@ function formatWasherType(type: string | undefined): string {
 }
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} canonical={canonical}>
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",

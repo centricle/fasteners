@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FastenerIcon from '../../components/FastenerIcon.astro';
 import { screws } from '../../utils/data';
+import { canonicalFor } from '../../utils/canonical';
 import type { Screw } from '../../types/fastener';
 
 export function getStaticPaths() {
@@ -19,6 +20,7 @@ const { screw } = Astro.props;
 
 const title = `${screw.name} Specifications`;
 const description = screw.description;
+const canonical = canonicalFor('screws', screw.slug);
 
 // Format dimension range for display
 function formatRange(range: { min: number; max: number; unit: string } | undefined): string {
@@ -39,7 +41,7 @@ function formatHeadStyle(head: string | undefined): string {
 }
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} canonical={canonical}>
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
