@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import BreadcrumbSchema from '../components/BreadcrumbSchema.astro';
 import { getAllFasteners } from '../utils/data';
 
 const allFasteners = getAllFasteners();
@@ -29,6 +30,7 @@ const description = 'Compare specifications side-by-side for screws, bolts, anch
 ---
 
 <BaseLayout title={title} description={description}>
+  <BreadcrumbSchema items={[{ label: 'Compare' }]} />
   <div class="max-w-6xl mx-auto px-4 py-8">
     <!-- Header -->
     <div class="mb-8">

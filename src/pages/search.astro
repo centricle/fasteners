@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import BreadcrumbSchema from '../components/BreadcrumbSchema.astro';
 import { getAllFasteners, searchFasteners } from '../utils/data';
 
 // Get data for server-side calculations
@@ -33,6 +34,7 @@ const description = 'Search the comprehensive fastener database by type, materia
 ---
 
 <BaseLayout title={title} description={description}>
+  <BreadcrumbSchema items={[{ label: 'Search' }]} />
   <div class="max-w-6xl mx-auto px-4 py-8">
     <!-- Header -->
     <div class="mb-12">

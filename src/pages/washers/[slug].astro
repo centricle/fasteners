@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import FastenerIcon from '../../components/FastenerIcon.astro';
 import { washers } from '../../utils/data';
 import { canonicalFor } from '../../utils/canonical';
+import BreadcrumbSchema from '../../components/BreadcrumbSchema.astro';
 import type { Washer } from '../../types/fastener';
 
 export function getStaticPaths() {
@@ -36,6 +37,7 @@ function formatWasherType(type: string | undefined): string {
 ---
 
 <BaseLayout title={title} description={description} canonical={canonical}>
+  <BreadcrumbSchema items={[{ label: 'Washers', href: '/washers' }, { label: washer.name }]} />
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
