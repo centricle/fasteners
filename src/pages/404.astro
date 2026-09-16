@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const categories = [
+  { href: '/screws', label: 'Screws' },
+  { href: '/bolts', label: 'Bolts' },
+  { href: '/anchors', label: 'Anchors' },
+  { href: '/nuts', label: 'Nuts' },
+  { href: '/washers', label: 'Washers' },
+];
+---
+
+<BaseLayout title="Page Not Found" description="That page does not exist on fasteners.fyi.">
+  <section class="py-12 sm:py-16">
+    <div class="max-w-3xl mx-auto px-4">
+      <p class="text-sm font-mono text-bp-text-faint mb-3">404</p>
+      <h1 class="text-3xl font-semibold mb-4">Page not found</h1>
+      <p class="text-lg text-bp-text-muted mb-10">
+        That URL does not match anything in the database. It may have been renamed, or it may never have existed.
+      </p>
+
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-bp-text-faint mb-4">Browse by category</h2>
+      <ul class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-10">
+        {categories.map((c) => (
+          <li>
+            <a
+              href={c.href}
+              class="block px-4 py-3 bg-bp-900 border border-bp-700 rounded-lg text-bp-text hover:border-accent-500 transition-colors"
+            >
+              {c.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="pt-8 border-t border-bp-700 text-sm text-bp-text-muted">
+        <p>
+          Or <a href="/search" class="text-accent-400 hover:text-accent-300 transition-colors">search the database</a>
+          &middot; <a href="/" class="text-accent-400 hover:text-accent-300 transition-colors">return home</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
