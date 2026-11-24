@@ -1,0 +1,30 @@
+---
+// The mark is a hex nut seen from above: the one fastener anybody can name
+// from its outline. Tape-measure yellow on a dark tile, in the fleet's
+// contained favicon pattern (rounded tile, rx 6).
+//
+// public/favicon.svg is the same drawing with the colors as hex;
+// scripts/icons.mjs renders the PNG icon from that file.
+//
+// Hovering the link turns the nut one flat.
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+---
+
+<svg viewBox="0 0 32 32" class:list={['mark', cls]} aria-hidden="true" focusable="false">
+  <rect class="tile" x="0.5" y="0.5" width="31" height="31" rx="6" />
+  <path class="nut" fill-rule="evenodd" d="M5.5 16 10.75 6.91h10.5L26.5 16l-5.25 9.09h-10.5ZM16 11.6a4.4 4.4 0 1 0 0 8.8 4.4 4.4 0 1 0 0-8.8Z" />
+</svg>
+
+<style>
+  .mark { display: block; flex: none; }
+  .tile { fill: var(--tile); stroke: color-mix(in oklch, var(--tile) 78%, white); }
+  .nut { fill: var(--tile-mark); transform-origin: 16px 16px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .nut { transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1); }
+    :global(a:hover) .nut,
+    :global(a:focus-visible) .nut { transform: rotate(60deg); }
+  }
+</style>

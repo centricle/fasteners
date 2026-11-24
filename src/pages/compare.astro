@@ -1,300 +1,181 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BreadcrumbSchema from '../components/BreadcrumbSchema.astro';
-import { getAllFasteners } from '../utils/data';
+import Figure from '../components/Figure.astro';
+import { CATEGORIES, label, sizeText } from '../utils/catalog';
+import { PAIRS } from '../utils/copy';
+import { canonicalFor } from '../utils/canonical';
 
-const allFasteners = getAllFasteners();
+// A fastener listed under two kinds is offered once, under its main one.
+const all = CATEGORIES.flatMap((c) => c.items.filter((f) => !canonicalFor(c.key, f.slug)).map((f) => ({ c, f: f as typeof f & Record<string, any> })));
 
-// Prepare client-side data
-const clientFasteners = allFasteners.map(f => ({
-  id: f.id,
-  name: f.name,
+const list = (v: string[] | undefined, map: (s: string) => string = (s) => s) => (v?.length ? v.map(map).join(', ') : '');
+const none = (v: string | undefined) => (v ? label(v) : '');
+
+// Every row a comparison can show, in order. A row appears only when at least
+// one of the selected fasteners has a value for it.
+const ROWS = ['Type', 'What it is', 'Head', 'Drive', 'Thread', 'Point', 'Locking', 'Washer kind', 'Goes into', 'Diameter', 'Length', 'Hole', 'Outside diameter', 'Thickness', 'Holds, pulling out', 'Holds, sideways', 'Made of', 'Sizes made in', 'Standards', 'Used for', 'Not for', 'Also called'];
+
+const data = all.map(({ c, f }) => ({
   slug: f.slug,
-  category: f.category,
-  description: f.description,
-  materials: f.materials,
-  applications: f.applications,
-  standards: f.standards || [],
-  headStyle: f.headStyle,
-  driveType: f.driveType,
-  threadType: f.threadType,
-  diameterRange: f.diameterRange,
-  lengthRange: f.lengthRange,
-  measurementSystem: f.measurementSystem,
-  aliases: f.aliases || [],
-  notRecommendedFor: f.notRecommendedFor || []
+  name: f.name,
+  href: `/${c.key}/${f.slug}`,
+  group: c.one,
+  cells: {
+    Type: c.one,
+    'What it is': f.description,
+    Head: none(f.headStyle),
+    Drive: none(f.driveType),
+    Thread: none(f.threadType),
+    Point: none(f.pointType),
+    Locking: none(f.lockingMechanism),
+    'Washer kind': none(f.washerType),
+    'Goes into': list(f.baseMaterial, label),
+    Diameter: sizeText(f.diameterRange, 'diameter'),
+    Length: sizeText(f.lengthRange),
+    Hole: sizeText(f.innerDiameterRange),
+    'Outside diameter': sizeText(f.outerDiameterRange),
+    Thickness: sizeText(f.thicknessRange, 'thickness'),
+    'Holds, pulling out': f.loadCapacity?.tension ? `${f.loadCapacity.tension.toLocaleString('en-US')} ${f.loadCapacity.unit}` : '',
+    'Holds, sideways': f.loadCapacity?.shear ? `${f.loadCapacity.shear.toLocaleString('en-US')} ${f.loadCapacity.unit}` : '',
+    'Made of': list(f.materials, label),
+    'Sizes made in': list(f.measurementSystem, (s) => (s === 'imperial' ? 'Inch' : label(s))),
+    Standards: list(f.standards),
+    'Used for': list(f.applications),
+    'Not for': list(f.notRecommendedFor),
+    'Also called': list(f.aliases),
+  } as Record<string, string>,
 }));
 
-const title = 'Compare Fasteners | fasteners.fyi';
-const description = 'Compare specifications side-by-side for screws, bolts, anchors, nuts, and washers.';
+const nameOf = (slug: string) => all.find((x) => x.f.slug === slug)?.f.name ?? slug;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title="Compare Fasteners" description="Put two or three screws, bolts, anchors, nuts or washers side by side and see where they differ.">
   <BreadcrumbSchema items={[{ label: 'Compare' }]} />
-  <div class="max-w-6xl mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="mb-8">
-      <nav class="flex mb-6 text-sm" aria-label="Breadcrumb">
-        <ol class="inline-flex items-center space-x-2">
-          <li>
-            <a href="/" class="text-bp-text-muted hover:text-bp-text">Home</a>
-          </li>
-          <li class="text-bp-text-faint">/</li>
-          <li class="text-bp-text">Compare</li>
-        </ol>
-      </nav>
+  <div class="wrap pt-5">
+    <nav class="crumbs mb-5" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span> <span class="text-ink" aria-current="page">Compare</span>
+    </nav>
+    <h1 class="text-[1.9rem] sm:text-[2.3rem] mb-2">Compare</h1>
+    <p class="text-[0.98rem] text-ink-2 mb-6 max-w-[38rem]">Pick two or three fasteners to see them side by side. Whatever is different between them is highlighted.</p>
 
-      <h1 class="text-4xl font-bold mb-4">Compare Fasteners</h1>
-      <p class="text-bp-text-muted">Select 2-3 fasteners to compare their specifications side-by-side.</p>
+    <div class="grid gap-3 md:grid-cols-3 mb-8">
+      {[1, 2, 3].map((n) => (
+        <label class="block">
+          <span class="label block mb-1.5">Fastener {n}{n === 3 && ' (optional)'}</span>
+          <select id={`select-${n}`} class="input">
+            <option value="">Pick a fastener</option>
+            {CATEGORIES.map((c) => (
+              <optgroup label={c.name}>
+                {all.filter((x) => x.c === c).sort((a, b) => a.f.name.localeCompare(b.f.name)).map((x) => <option value={x.f.slug}>{x.f.name}</option>)}
+              </optgroup>
+            ))}
+          </select>
+        </label>
+      ))}
     </div>
 
-    <!-- Selection Controls -->
-    <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div>
-        <label class="block text-sm text-bp-text-muted mb-2">Fastener 1</label>
-        <select id="select-1" class="w-full px-4 py-3 bg-bp-900 border border-bp-600 rounded-lg text-bp-text focus:ring-2 focus:ring-accent-500 focus:border-accent-500">
-          <option value="">Select a fastener...</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-sm text-bp-text-muted mb-2">Fastener 2</label>
-        <select id="select-2" class="w-full px-4 py-3 bg-bp-900 border border-bp-600 rounded-lg text-bp-text focus:ring-2 focus:ring-accent-500 focus:border-accent-500">
-          <option value="">Select a fastener...</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-sm text-bp-text-muted mb-2">Fastener 3 (optional)</label>
-        <select id="select-3" class="w-full px-4 py-3 bg-bp-900 border border-bp-600 rounded-lg text-bp-text focus:ring-2 focus:ring-accent-500 focus:border-accent-500">
-          <option value="">Select a fastener...</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Comparison Table -->
-    <div id="comparison-table" class="hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr id="table-header" class="border-b border-bp-600">
-              <th class="text-left py-4 px-4 text-bp-text-muted font-medium w-40">Specification</th>
-            </tr>
-          </thead>
-          <tbody id="table-body">
-          </tbody>
+    <div id="comparison-table" hidden>
+      <div class="table-scroll">
+        <table class="table">
+          <thead><tr id="table-header"></tr></thead>
+          <tbody id="table-body"></tbody>
         </table>
       </div>
+      <p class="text-[0.72rem] text-muted mt-2.5"><span class="inline-block w-3.5 h-3.5 align-[-0.15em] bg-accent-soft border border-line-2"></span> Highlighted rows are where they differ. The pictures share one thread size.</p>
     </div>
 
-    <!-- Empty State -->
-    <div id="empty-state" class="text-center py-16">
-      <div class="mx-auto w-24 h-24 bg-bp-800 rounded-full flex items-center justify-center mb-6">
-        <svg class="w-12 h-12 text-bp-text-faint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-        </svg>
-      </div>
-      <h2 class="text-xl font-semibold mb-2">Select fasteners to compare</h2>
-      <p class="text-bp-text-muted max-w-md mx-auto">
-        Choose at least two fasteners from the dropdowns above to see their specifications compared side-by-side.
-      </p>
+    <div id="empty-state" class="callout max-w-[38rem]">
+      <p class="font-bold mb-1">Nothing picked yet</p>
+      <p class="text-ink-2">Pick at least two fasteners above, or start from one of the pairs below.</p>
     </div>
 
-    <!-- Popular Comparisons -->
-    <div class="mt-12 border-t border-bp-700 pt-8">
-      <h2 class="text-xl font-semibold mb-4">Popular Comparisons</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <a href="/compare?a=wood-screw&b=drywall-screw" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
-          <span class="text-accent-400">Wood Screw</span> vs <span class="text-accent-400">Drywall Screw</span>
-        </a>
-        <a href="/compare?a=hex-bolt&b=carriage-bolt" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
-          <span class="text-accent-400">Hex Bolt</span> vs <span class="text-accent-400">Carriage Bolt</span>
-        </a>
-        <a href="/compare?a=toggle-bolt&b=molly-bolt" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
-          <span class="text-accent-400">Toggle Bolt</span> vs <span class="text-accent-400">Molly Bolt</span>
-        </a>
-        <a href="/compare?a=lock-nut&b=hex-nut" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
-          <span class="text-accent-400">Lock Nut</span> vs <span class="text-accent-400">Hex Nut</span>
-        </a>
-        <a href="/compare?a=flat-washer&b=lock-washer" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
-          <span class="text-accent-400">Flat Washer</span> vs <span class="text-accent-400">Lock Washer</span>
-        </a>
-        <a href="/compare?a=wedge-anchor&b=sleeve-anchor" class="block p-4 border border-bp-700 rounded-lg bg-bp-900/60 hover:border-accent-500 transition-colors">
-          <span class="text-accent-400">Wedge Anchor</span> vs <span class="text-accent-400">Sleeve Anchor</span>
-        </a>
+    <section class="mt-12">
+      <h2 class="section-title">Often mixed up</h2>
+      <div class="facts sm:grid-cols-2 lg:grid-cols-3">
+        {PAIRS.map(([a, b]) => (
+          <a href={`/compare?a=${a}&b=${b}`} class="fact text-[0.84rem]">
+            <span class="font-bold">{nameOf(a)}</span> or <span class="font-bold">{nameOf(b)}</span>?
+          </a>
+        ))}
       </div>
+    </section>
+
+    <!-- Pictures for the column heads, cloned in by the script below. -->
+    <div hidden id="figure-pool">
+      {all.map(({ c, f }) => <div data-fig={f.slug}><Figure category={c.key} slug={f.slug} variant="card" scale={0.1} /></div>)}
     </div>
   </div>
 
-  <script define:vars={{ clientFasteners }}>
-    const fastenerData = clientFasteners;
-    const fastenerMap = new Map(fastenerData.map(f => [f.slug, f]));
+  <script define:vars={{ data, ROWS }}>
+    const bySlug = new Map(data.map((f) => [f.slug, f]));
+    const selects = [1, 2, 3].map((n) => document.getElementById('select-' + n));
+    const table = document.getElementById('comparison-table');
+    const empty = document.getElementById('empty-state');
+    const header = document.getElementById('table-header');
+    const body = document.getElementById('table-body');
+    const pool = document.getElementById('figure-pool');
 
-    // Group fasteners by category for the dropdown
-    const grouped = fastenerData.reduce((acc, f) => {
-      const cat = f.category.charAt(0).toUpperCase() + f.category.slice(1) + 's';
-      if (!acc[cat]) acc[cat] = [];
-      acc[cat].push(f);
-      return acc;
-    }, {});
-
-    // Populate dropdowns
-    function populateDropdowns() {
-      const selects = ['select-1', 'select-2', 'select-3'].map(id => document.getElementById(id));
-
-      selects.forEach(select => {
-        // Clear existing options except the first
-        while (select.options.length > 1) {
-          select.remove(1);
-        }
-
-        // Add grouped options
-        Object.entries(grouped).sort().forEach(([category, fasteners]) => {
-          const optgroup = document.createElement('optgroup');
-          optgroup.label = category;
-
-          fasteners.sort((a, b) => a.name.localeCompare(b.name)).forEach(f => {
-            const option = document.createElement('option');
-            option.value = f.slug;
-            option.textContent = f.name;
-            optgroup.appendChild(option);
-          });
-
-          select.appendChild(optgroup);
-        });
-      });
+    function el(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
     }
 
-    // Format dimension range
-    function formatRange(range) {
-      if (!range) return 'N/A';
-      return `${range.min}" - ${range.max}"`;
-    }
+    function render() {
+      const picked = selects.map((s) => bySlug.get(s.value)).filter(Boolean);
+      const ready = picked.length >= 2;
+      table.hidden = !ready;
+      empty.hidden = ready;
 
-    // Format array as list
-    function formatList(arr, limit = 4) {
-      if (!arr || arr.length === 0) return 'N/A';
-      const items = arr.slice(0, limit);
-      const more = arr.length > limit ? ` +${arr.length - limit} more` : '';
-      return items.join(', ') + more;
-    }
-
-    // Get comparison rows
-    function getComparisonRows(fasteners) {
-      return [
-        { label: 'Category', key: 'category', format: v => v ? v.charAt(0).toUpperCase() + v.slice(1) : 'N/A' },
-        { label: 'Description', key: 'description', format: v => v || 'N/A' },
-        { label: 'Head Style', key: 'headStyle', format: v => v ? v.charAt(0).toUpperCase() + v.slice(1).replace(/-/g, ' ') : 'N/A' },
-        { label: 'Drive Type', key: 'driveType', format: v => v ? v.charAt(0).toUpperCase() + v.slice(1).replace(/-/g, ' ') : 'N/A' },
-        { label: 'Thread Type', key: 'threadType', format: v => v ? v.charAt(0).toUpperCase() + v.slice(1).replace(/-/g, ' ') : 'N/A' },
-        { label: 'Diameter Range', key: 'diameterRange', format: formatRange },
-        { label: 'Length Range', key: 'lengthRange', format: formatRange },
-        { label: 'Materials', key: 'materials', format: arr => formatList(arr?.map(m => m.replace(/-/g, ' '))) },
-        { label: 'Measurement', key: 'measurementSystem', format: arr => formatList(arr?.map(s => s.charAt(0).toUpperCase() + s.slice(1))) },
-        { label: 'Standards', key: 'standards', format: arr => formatList(arr) },
-        { label: 'Applications', key: 'applications', format: arr => formatList(arr) },
-        { label: 'Not Recommended For', key: 'notRecommendedFor', format: arr => formatList(arr) },
-        { label: 'Also Known As', key: 'aliases', format: arr => formatList(arr) }
-      ];
-    }
-
-    // Check if values differ
-    function valuesDiffer(values) {
-      const strings = values.map(v => JSON.stringify(v));
-      return new Set(strings).size > 1;
-    }
-
-    // Render comparison table
-    function renderComparison() {
-      const slugs = [
-        document.getElementById('select-1').value,
-        document.getElementById('select-2').value,
-        document.getElementById('select-3').value
-      ].filter(Boolean);
-
-      const emptyState = document.getElementById('empty-state');
-      const table = document.getElementById('comparison-table');
-
-      if (slugs.length < 2) {
-        emptyState.classList.remove('hidden');
-        table.classList.add('hidden');
-        return;
-      }
-
-      emptyState.classList.add('hidden');
-      table.classList.remove('hidden');
-
-      const fasteners = slugs.map(slug => fastenerMap.get(slug));
-      const rows = getComparisonRows(fasteners);
-
-      // Build header
-      const header = document.getElementById('table-header');
-      header.innerHTML = '<th class="text-left py-4 px-4 text-bp-text-muted font-medium w-40">Specification</th>';
-      fasteners.forEach(f => {
-        const th = document.createElement('th');
-        th.className = 'text-left py-4 px-4 text-bp-text font-semibold';
-        th.innerHTML = `<a href="/${f.category}s/${f.slug}" class="hover:text-accent-400 transition-colors">${f.name}</a>`;
-        header.appendChild(th);
-      });
-
-      // Build body
-      const body = document.getElementById('table-body');
-      body.innerHTML = '';
-
-      rows.forEach(row => {
-        const values = fasteners.map(f => f[row.key]);
-        const differs = valuesDiffer(values);
-
-        const tr = document.createElement('tr');
-        tr.className = 'border-b border-bp-700';
-
-        const labelTd = document.createElement('td');
-        labelTd.className = 'py-4 px-4 text-bp-text-muted font-medium align-top';
-        labelTd.textContent = row.label;
-        tr.appendChild(labelTd);
-
-        fasteners.forEach((f, i) => {
-          const td = document.createElement('td');
-          td.className = `py-4 px-4 text-bp-text align-top ${differs ? 'bg-accent-600/10' : ''}`;
-
-          if (row.key === 'description') {
-            td.className += ' text-sm';
-          }
-
-          td.textContent = row.format(values[i]);
-          tr.appendChild(td);
-        });
-
-        body.appendChild(tr);
-      });
-
-      // Update URL
       const url = new URL(window.location);
-      url.searchParams.set('a', slugs[0] || '');
-      url.searchParams.set('b', slugs[1] || '');
-      if (slugs[2]) {
-        url.searchParams.set('c', slugs[2]);
-      } else {
-        url.searchParams.delete('c');
-      }
+      ['a', 'b', 'c'].forEach((k, i) => {
+        if (selects[i].value) url.searchParams.set(k, selects[i].value);
+        else url.searchParams.delete(k);
+      });
       window.history.replaceState({}, '', url);
+      if (!ready) return;
+
+      // The pictures stand on one strip of paper that runs across the columns;
+      // each name sits under its own, off the paper.
+      header.replaceChildren(el('td', '!bg-surface !border-b-2 !border-b-ink', ''));
+      for (const f of picked) {
+        const th = el('th', '!align-bottom !whitespace-normal !bg-surface !p-0');
+        const fig = pool.querySelector('[data-fig="' + f.slug + '"] svg');
+        if (fig) {
+          const box = el('div', 'flex items-end justify-center h-[10.6rem] px-[0.7rem] pt-[0.55rem] pb-2 bg-stage');
+          box.append(fig.cloneNode(true));
+          th.append(box);
+        }
+        const name = el('div', 'px-[0.7rem] pt-2 pb-[0.55rem]');
+        const a = el('a', 'link block text-[0.86rem]', f.name);
+        a.href = f.href;
+        name.append(a, el('span', 'label block mt-0.5', f.group));
+        th.append(name);
+        header.append(th);
+      }
+
+      body.replaceChildren();
+      for (const row of ROWS) {
+        const values = picked.map((f) => f.cells[row] || '');
+        if (!values.some(Boolean)) continue;
+        const differs = new Set(values).size > 1 && row !== 'What it is';
+        const tr = el('tr');
+        const th = el('th', 'whitespace-nowrap', row);
+        th.scope = 'row';
+        tr.append(th);
+        for (const v of values) tr.append(el('td', (differs ? 'diff ' : '') + (row === 'What it is' ? 'min-w-[13rem]' : ''), v || '–'));
+        body.append(tr);
+      }
     }
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      populateDropdowns();
-
-      // Set initial values from URL
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('a')) document.getElementById('select-1').value = params.get('a');
-      if (params.get('b')) document.getElementById('select-2').value = params.get('b');
-      if (params.get('c')) document.getElementById('select-3').value = params.get('c');
-
-      // Add change listeners
-      ['select-1', 'select-2', 'select-3'].forEach(id => {
-        document.getElementById(id).addEventListener('change', renderComparison);
-      });
-
-      // Initial render
-      renderComparison();
+    const params = new URLSearchParams(window.location.search);
+    ['a', 'b', 'c'].forEach((k, i) => {
+      const v = params.get(k);
+      if (v && bySlug.has(v)) selects[i].value = v;
     });
+    selects.forEach((s) => s.addEventListener('change', render));
+    render();
   </script>
 </BaseLayout>

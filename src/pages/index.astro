@@ -1,82 +1,105 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import FastenerIcon from '../components/FastenerIcon.astro';
-import { screws, bolts, anchors, nuts, washers } from '../utils/data';
+import Figure from '../components/Figure.astro';
+import { CATEGORIES, TOTAL } from '../utils/catalog';
+import { COPY, PAIRS } from '../utils/copy';
+import { canonicalFor } from '../utils/canonical';
 
-const categories = [
-  {
-    name: 'Screws',
-    href: '/screws',
-    description: 'Wood screws, machine screws, self-tapping, and specialty screws',
-    count: screws.length,
-    iconSlug: 'wood-screw',
-    iconCategory: 'screws' as const
-  },
-  {
-    name: 'Bolts',
-    href: '/bolts',
-    description: 'Hex bolts, carriage bolts, eye bolts, and structural fasteners',
-    count: bolts.length,
-    iconSlug: 'hex-bolt',
-    iconCategory: 'bolts' as const
-  },
-  {
-    name: 'Anchors',
-    href: '/anchors',
-    description: 'Wall anchors, concrete anchors, toggle bolts, and expansion anchors',
-    count: anchors.length,
-    iconSlug: 'wedge-anchor',
-    iconCategory: 'anchors' as const
-  },
-  {
-    name: 'Nuts',
-    href: '/nuts',
-    description: 'Hex nuts, lock nuts, wing nuts, and specialty nuts',
-    count: nuts.length,
-    iconSlug: 'hex-nut',
-    iconCategory: 'nuts' as const
-  },
-  {
-    name: 'Washers',
-    href: '/washers',
-    description: 'Flat washers, lock washers, spring washers, and specialty washers',
-    count: washers.length,
-    iconSlug: 'flat-washer',
-    iconCategory: 'washers' as const
-  }
+// One row of parts for the opening picture, heads on a common line.
+const lineup = [
+  ['screws', 'wood-screw'],
+  ['screws', 'machine-screw'],
+  ['bolts', 'hex-bolt'],
+  ['bolts', 'carriage-bolt'],
+  ['screws', 'socket-head-cap-screw'],
+  ['anchors', 'wedge-anchor'],
+  ['bolts', 'eye-bolt'],
 ];
+// The part that stands for each kind.
+const lead: Record<string, string> = { screws: 'wood-screw', bolts: 'hex-bolt', anchors: 'toggle-bolt', nuts: 'hex-nut', washers: 'flat-washer' };
+
+// A fastener listed under two kinds is looked up under its main one.
+const find = (slug: string) => {
+  for (const c of CATEGORIES) {
+    const item = c.items.find((f) => f.slug === slug);
+    if (item && !canonicalFor(c.key, slug)) return { c, item };
+  }
+  return null;
+};
+const pairs = PAIRS.map(([a, b]) => ({ a: find(a), b: find(b) })).filter((p) => p.a && p.b) as { a: NonNullable<ReturnType<typeof find>>; b: NonNullable<ReturnType<typeof find>> }[];
 ---
 
-<BaseLayout title="Home">
-  <div class="max-w-6xl mx-auto px-4 py-16">
-    <div class="text-center mb-16">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">
-        <span class="text-accent-400">Fastener</span> Specifications Database
-      </h1>
-      <p class="text-xl text-bp-text-muted max-w-2xl mx-auto">
-        Comprehensive, objective specifications for screws, bolts, anchors, and nuts.
-        No opinions, just facts.
-      </p>
-    </div>
+<BaseLayout bare title="fasteners.fyi: every common screw, bolt, nut, washer and anchor" description={`What ${TOTAL} common screws, bolts, nuts, washers and anchors look like, what each one is for and the sizes it comes in.`}>
+  <div class="wrap pt-8 lg:pt-12">
+    <div class="grid gap-8 lg:gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-center">
+      <div>
+        <h1 class="text-[2.05rem] sm:text-[2.75rem] leading-[1.03]">Every common screw, bolt, nut, washer and anchor.</h1>
+        <p class="mt-4 text-[1.02rem] leading-[1.5] text-ink-2 max-w-[30rem]">What each one looks like, what it is for and the sizes it comes in. {TOTAL} types, with a picture of every one.</p>
+        <form action="/search" method="get" role="search" class="mt-6 flex gap-2 max-w-[31rem]">
+          <input class="input" type="search" name="q" placeholder="lag bolt, drywall anchor, wing nut" aria-label="Search fasteners by name or use" />
+          <button type="submit" class="btn btn-primary shrink-0 !px-5">Search</button>
+        </form>
+      </div>
 
-    <div class="grid md:grid-cols-2 gap-6 mb-16">
-      {categories.map((category) => (
-        <a
-          href={category.href}
-          class="flex gap-5 items-start p-6 rounded-lg border border-bp-700 bg-bp-900/60 hover:border-accent-500 hover:bg-bp-900 transition-all group"
-        >
-          <FastenerIcon slug={category.iconSlug} category={category.iconCategory} class="w-14 shrink-0 text-bp-text-faint group-hover:text-accent-400 transition-colors" />
-          <div>
-            <h2 class="text-2xl font-semibold text-bp-text group-hover:text-accent-400 transition-colors mb-2">
-              {category.name}
-            </h2>
-            <p class="text-bp-text-muted mb-4">{category.description}</p>
-            <span class="text-sm text-bp-text-faint">
-              {category.count > 0 ? `${category.count} types` : 'Coming soon'}
-            </span>
-          </div>
-        </a>
-      ))}
+      <div class="card lineup" role="img" aria-label="A wood screw, machine screw, hex bolt, carriage bolt, socket head cap screw, wedge anchor and eye bolt, side by side">
+        {lineup.map(([c, s]) => <Figure category={c} slug={s} variant="card" views="side" scale={0.125} />)}
+      </div>
     </div>
+  </div>
+
+  <div class="wrap mt-14">
+    <section class="mb-14">
+      <h2 class="section-title">Five kinds of fastener</h2>
+      <div class="kinds">
+        {CATEGORIES.map((c) => (
+          <a href={`/${c.key}`} class="kind">
+            <span class="kind-pic"><Figure category={c.key} slug={lead[c.key]} variant="card" views={c.key === 'nuts' || c.key === 'washers' ? 'both' : 'side'} scale={c.key === 'nuts' || c.key === 'washers' ? 0.12 : 0.085} /></span>
+            <span class="kind-text">
+              <span class="kind-name">{c.name}</span>
+              <span class="kind-what">{COPY[c.key].what}</span>
+              <span class="kind-count">{c.items.length} types</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-14">
+      <h2 class="section-title">Often mixed up</h2>
+      <div class="facts sm:grid-cols-2 lg:grid-cols-3">
+        {pairs.map(({ a, b }) => (
+          <a href={`/compare?a=${a.item.slug}&b=${b.item.slug}`} class="fact !flex items-center gap-3">
+            <span class="thumb flex items-center justify-center gap-2 w-[4.6rem] h-[4.2rem] shrink-0">
+              <Figure category={a.c.key} slug={a.item.slug} variant="mini" scale={0.05} />
+              <Figure category={b.c.key} slug={b.item.slug} variant="mini" scale={0.05} />
+            </span>
+            <span class="text-[0.84rem] leading-[1.3]"><span class="font-bold">{a.item.name}</span> or <span class="font-bold">{b.item.name}</span>?</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-14">
+      <a href="/sizes" class="callout block hover:border-ink">
+        <span class="block font-bold text-[0.95rem]">What does #8 x 1-1/4 mean? Or 1/4-20, or M6?</span>
+        <span class="block text-ink-2 mt-0.5">How to read a fastener size, and where a length is measured from.</span>
+      </a>
+    </section>
+
+    <section>
+      <h2 class="section-title">All {TOTAL}, by name</h2>
+      <div class="grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
+        {CATEGORIES.map((c) => (
+          <div>
+            <h3 class="mb-2"><a href={`/${c.key}`} class="tag">{c.name}</a></h3>
+            <ul class="columns-2 sm:columns-1 gap-x-6 text-[0.78rem] leading-[1.35]">
+              {c.items.map((f) => (
+                <li class="break-inside-avoid"><a class="block py-[0.28rem] text-ink-2 hover:text-ink hover:underline decoration-accent decoration-[0.16em] underline-offset-[0.18em]" href={`/${c.key}/${f.slug}`}>{f.name}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
   </div>
 </BaseLayout>

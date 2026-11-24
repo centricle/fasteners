@@ -3,32 +3,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="About" description="Why fasteners.fyi exists. The fastener spec reference that should already exist.">
-  <section class="py-12 sm:py-16">
-    <div class="max-w-3xl mx-auto px-4">
-      <h1 class="text-3xl font-semibold mb-8">About</h1>
+  <div class="wrap pt-10">
+    <h1 class="text-[1.9rem] sm:text-[2.3rem] mb-6">About fasteners.fyi</h1>
 
+    <div class="prose">
       <!-- Origin story -->
-      <div class="mb-10">
-        <p class="text-lg mb-4" style="color: var(--bp-text); opacity: 0.8;">
-          M6 or 1/4-20? Every trip to the hardware store starts with the same question. Metric or imperial, thread pitch, head type, grade — the specs exist in manufacturer catalogs, but good luck finding them when you're standing in the fastener aisle trying to match a bolt.
-        </p>
-        <p class="text-lg" style="color: var(--bp-text); opacity: 0.8;">
-          I built fasteners.fyi so the answer is one search away. Every fastener type, every spec, sourced from manufacturer datasheets and industry standards.
-        </p>
-      </div>
+      <p class="!text-[1rem] !text-ink">
+        M6 or 1/4-20? Every trip to the hardware store starts with the same question. Metric or imperial, thread pitch, head type, grade — the specs exist in manufacturer catalogs, but good luck finding them when you're standing in the fastener aisle trying to match a bolt.
+      </p>
+      <p class="!text-[1rem] !text-ink">
+        I built fasteners.fyi so the answer is one search away. Every fastener type, every spec, sourced from manufacturer datasheets and industry standards.
+      </p>
 
-      <!-- What it does -->
-      <h2 class="text-2xl font-semibold mb-4">What it does</h2>
-      <p class="text-bp-text-muted mb-10">
+      <h2>What it does</h2>
+      <p>
         fasteners.fyi is a specification database for screws, bolts, anchors, nuts, and washers. Look up any fastener type and get dimensions, thread specs, strength grades, and material options. No opinions — just reliable technical data.
       </p>
 
-      <!-- Built by -->
-      <div class="pt-8 border-t border-bp-700 text-sm text-bp-text-muted">
-        <p>
-          Built by <a href="https://centricle.com" class="text-accent-400 hover:text-accent-300 transition-colors">Kevin Smith</a> at Centricle. No ads. No sponsored content. No affiliate links.
-        </p>
-      </div>
+      <h2>The pictures</h2>
+      <p>
+        Every fastener has its own picture, shown from the side and from above, with its measurements named on it. All of them share one thread size, so a head on one can be compared with a head on another. They are drawn at a typical length and are not actual size. <a href="/sizes">How to read a size</a> covers what the numbers on a box mean and where a length is measured from.
+      </p>
+
+      <h2>Built by</h2>
+      <p>
+        Built by <a href="https://centricle.com">Kevin Smith</a> at Centricle. No ads. No sponsored content. No affiliate links.
+      </p>
     </div>
-  </section>
+  </div>
 </BaseLayout>

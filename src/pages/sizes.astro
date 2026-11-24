@@ -1,0 +1,120 @@
+---
+// What the size on a box means and where a length is measured from. This is
+// the question the whole site starts from (see /about), so it gets its own
+// page instead of living in five FAQs.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BreadcrumbSchema from '../components/BreadcrumbSchema.astro';
+import Figure from '../components/Figure.astro';
+
+const written = [
+  { size: '#8 x 1-1/4', means: 'A number 8 screw, 1-1/4 in long. The number is the diameter.' },
+  { size: '1/4-20 x 2', means: '1/4 in diameter, 20 threads per inch, 2 in long.' },
+  { size: 'M6 x 1.0 x 25', means: '6 mm diameter, threads 1.0 mm apart, 25 mm long.' },
+];
+
+// A screw gauge number is 0.060 in plus 0.013 in for each number.
+const gauges = [2, 4, 6, 8, 10, 12, 14].map((n) => {
+  const inch = 0.06 + 0.013 * n;
+  return { n, inch: inch.toFixed(3), mm: (inch * 25.4).toFixed(1) };
+});
+
+const lengths = [
+  { head: 'Head sits on top of the surface', rule: 'From under the head to the tip.', ex: 'Pan, round, button, hex, socket, carriage' },
+  { head: 'Head sinks flush', rule: 'Overall, head included.', ex: 'Flat, bugle, trim' },
+  { head: 'No head', rule: 'Overall.', ex: 'Set screw, stud, hanger bolt' },
+  { head: 'Shoulder screw', rule: 'Length of the shoulder. The thread is extra.', ex: 'Shoulder screw, shoulder bolt' },
+  { head: 'Bent rod', rule: 'Overall for J and L bolts. Inside the bend for U-bolts.', ex: 'J-bolt, L-bolt, U-bolt' },
+];
+---
+
+<BaseLayout title="How to read a fastener size" description="What #8 x 1-1/4, 1/4-20 and M6 x 1.0 mean, how screw gauge numbers convert to inches and millimeters, and where a fastener's length is measured from.">
+  <BreadcrumbSchema items={[{ label: 'How to read a size' }]} />
+  <div class="wrap pt-5">
+    <nav class="crumbs mb-5" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span> <span class="text-ink" aria-current="page">How to read a size</span>
+    </nav>
+
+    <div class="entry">
+      <header class="entry-head">
+        <h1 class="text-[1.75rem] sm:text-[2.15rem]">How to read a fastener size</h1>
+        <p class="mt-3 text-[0.98rem] leading-[1.5] text-ink-2 max-w-[36rem]">A size is a diameter and a length, with the thread between them when it matters. The diameter always comes first and the length last.</p>
+      </header>
+
+      <figure class="entry-pic picture">
+        <div class="picture-stage">
+          <Figure category="bolts" slug="hex-bolt" variant="full" words={{ d: 'Diameter', L: 'Length' }} label="A hex bolt from the side and from above, with its diameter and length marked" />
+        </div>
+        <figcaption>A hex bolt. Its diameter is taken across the threads and its length from under the head.</figcaption>
+      </figure>
+
+      <div class="entry-body">
+        <section class="mb-10">
+          <h2 class="section-title">The numbers on the box</h2>
+          <div class="table-scroll">
+            <table class="table">
+              <thead><tr><th scope="col">Written</th><th scope="col">Means</th></tr></thead>
+              <tbody>
+                {written.map((r) => <tr><th scope="row" class="whitespace-nowrap num">{r.size}</th><td>{r.means}</td></tr>)}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="section-title">Diameter</h2>
+          <div class="prose mb-4">
+            <p>Diameter is measured across the outside of the threads. Inch sizes smaller than 1/4 in use a gauge number instead of a fraction. #0 is 0.060 in, and each number up adds 0.013 in.</p>
+          </div>
+          <div class="table-scroll max-w-[24rem]">
+            <table class="table">
+              <thead><tr><th scope="col">Gauge</th><th scope="col">Inches</th><th scope="col">Millimeters</th></tr></thead>
+              <tbody>
+                {gauges.map((g) => <tr><th scope="row">#{g.n}</th><td>{g.inch} in</td><td>{g.mm} mm</td></tr>)}
+              </tbody>
+            </table>
+          </div>
+          <div class="prose mt-4">
+            <p>From 1/4 in up, the diameter is written as a fraction. Metric sizes are an M and the diameter in millimeters: M6 is 6 mm across.</p>
+          </div>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="section-title">Thread</h2>
+          <div class="prose">
+            <p>The second number in a size like 1/4-20 is threads per inch. A 1/4 in bolt is made as 1/4-20 (coarse) and as 1/4-28 (fine), and a nut cut for one does not fit the other.</p>
+            <p>Metric sizes give the distance from one thread to the next instead. M6 x 1.0 has threads 1.0 mm apart.</p>
+          </div>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="section-title">Length</h2>
+          <div class="prose mb-4">
+            <p>Where a length starts depends on the head. Each picture on this site marks the length the way that fastener is measured when it is sold.</p>
+          </div>
+          <div class="table-scroll">
+            <table class="table">
+              <thead><tr><th scope="col">Fastener</th><th scope="col">Length is measured</th><th scope="col">Examples</th></tr></thead>
+              <tbody>
+                {lengths.map((r) => <tr><th scope="row">{r.head}</th><td>{r.rule}</td><td>{r.ex}</td></tr>)}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="section-title">About the pictures</h2>
+          <div class="prose">
+            <ul>
+              <li><strong>Not actual size.</strong> Every picture is drawn around the same thread diameter, so one fastener can be compared with another. No measurement should be taken from a picture.</li>
+              <li><strong>One length.</strong> Each fastener is drawn at a typical length. The range it comes in is listed under its sizes.</li>
+              <li><strong>One head.</strong> A type sold with several heads or drives is drawn with the one its page lists. A wood screw is shown with a flat head and a Phillips drive; others exist.</li>
+              <li><strong>Threads.</strong> Threads are drawn farther apart than they are, so they stay visible in a small picture. The shape of each thread is kept.</li>
+              <li><strong>Dashed outlines.</strong> A dashed outline is a part in its other position, such as the wings of a toggle bolt folded to pass through the hole.</li>
+              <li><strong>Blue.</strong> Blue marks a part that is not metal: nylon, plastic, rubber or resin.</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

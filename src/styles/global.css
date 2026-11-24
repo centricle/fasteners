@@ -1,40 +1,392 @@
 @import "tailwindcss";
 
-@theme {
-  /* Blueprint surface scale (replaces zinc) */
-  --color-bp-950: oklch(0.16 0.04 250);
-  --color-bp-900: oklch(0.20 0.05 250);
-  --color-bp-800: oklch(0.26 0.06 250);
-  --color-bp-700: oklch(0.32 0.06 250);
-  --color-bp-600: oklch(0.38 0.06 250);
+/* Who this is for: someone in the fastener aisle or the garage, phone in one
+   hand and a bolt in the other. So the page reads like the label on a parts
+   bin, not like a drawing office: card-stock white, black ink, tape-measure
+   yellow as the one signal color, parts drawn as solid zinc-plated metal, and
+   system type set large enough to read at arm's length.
 
-  /* Accent gold (replaces primary blue) */
-  --color-accent-300: oklch(0.82 0.14 80);
-  --color-accent-400: oklch(0.75 0.15 80);
-  --color-accent-500: oklch(0.65 0.16 80);
-  --color-accent-600: oklch(0.56 0.15 80);
+   Dark is a plain charcoal, the same label under shop lights at night. The
+   parts stay the color of metal in both.
 
-  /* Text hierarchy (chalk on blueprint) */
-  --color-bp-text: oklch(0.90 0.01 250);
-  --color-bp-text-muted: oklch(0.70 0.02 250);
-  --color-bp-text-faint: oklch(0.50 0.03 250);
+   Every color is a token so @centricle/tuner can find it. */
+:root {
+  /* A label is cut square. Every corner on the page comes from here, so the
+     only round things are the parts. */
+  --corner: 0px;
+  --bg: oklch(0.968 0.004 95);
+  --surface: oklch(0.995 0.002 95);
+  --surface-2: oklch(0.945 0.005 95);
+  --surface-3: oklch(0.91 0.006 95);
+  --ink: oklch(0.2 0.008 85);
+  --ink-2: oklch(0.36 0.008 85);
+  --muted: oklch(0.49 0.008 85);
+  --line: oklch(0.89 0.005 95);
+  --line-2: oklch(0.8 0.006 95);
+  /* Tape-measure yellow. Never text on its own: it is a fill under black
+     ink, or the underline on a link. */
+  --accent: oklch(0.87 0.175 93);
+  --accent-ink: oklch(0.2 0.008 85);
+  --accent-soft: oklch(0.955 0.075 98);
+  --danger: oklch(0.52 0.17 27);
+  --ok: oklch(0.5 0.12 150);
+  /* Where a picture sits: paper, in both themes. A thumbnail in a list sits
+     straight on the page here, where the page is already paper. */
+  --stage: oklch(0.995 0.002 95);
+  --thumb: transparent;
+  /* The mark: a yellow nut on a dark tile, the same in both themes. */
+  --tile: oklch(0.2 0.008 85);
+  --tile-mark: oklch(0.87 0.175 93);
+  /* Pictures: zinc-plated steel lit from the upper left, its outline, a cut
+     face too thin to shade, the fine lines on the part (threads, knurling),
+     anything that is not metal, the lines that mark a measurement, and the
+     dashed outline of a part that is somewhere else. */
+  --metal-hi: oklch(0.975 0.003 250);
+  --metal: oklch(0.87 0.008 250);
+  --metal-lo: oklch(0.73 0.014 250);
+  --fig-line: oklch(0.27 0.012 255);
+  --fig-ink: oklch(0.27 0.012 255);
+  --fig-detail: oklch(0.45 0.012 255);
+  --fig-soft: oklch(0.74 0.085 245);
+  --fig-dim: oklch(0.36 0.008 85);
+  --fig-ghost: oklch(0.49 0.008 85);
+  color-scheme: light;
+}
 
-  /* SVG inset */
-  --color-svg-inset: oklch(0.25 0.03 250);
+/* Dark. A picture still sits on paper, so a part looks the same at night as
+   it does in daylight: dark outline, gray metal. The paper is dimmed card
+   stock, not white, and the charcoal around it is lifted a little, so a wall
+   of pictures does not glare. Only pictures go on the paper; words stay on
+   the charcoal. */
+:root[data-theme="dark"] {
+  --bg: oklch(0.205 0.004 85);
+  --surface: oklch(0.245 0.005 85);
+  --surface-2: oklch(0.285 0.005 85);
+  --surface-3: oklch(0.33 0.006 85);
+  --ink: oklch(0.93 0.004 95);
+  --ink-2: oklch(0.82 0.005 95);
+  --muted: oklch(0.68 0.006 95);
+  --line: oklch(0.32 0.005 85);
+  --line-2: oklch(0.42 0.006 85);
+  --accent: oklch(0.87 0.175 93);
+  --accent-ink: oklch(0.2 0.008 85);
+  --accent-soft: oklch(0.37 0.075 92);
+  --danger: oklch(0.72 0.15 27);
+  --ok: oklch(0.76 0.13 150);
+  --stage: oklch(0.87 0.01 92);
+  --thumb: var(--stage);
+  --tile: oklch(0.13 0.005 85);
+  --tile-mark: oklch(0.87 0.175 93);
+  --metal-hi: oklch(0.94 0.004 250);
+  --metal: oklch(0.79 0.009 250);
+  --metal-lo: oklch(0.61 0.014 250);
+  --fig-line: oklch(0.25 0.012 255);
+  --fig-ink: oklch(0.25 0.012 255);
+  --fig-detail: oklch(0.41 0.012 255);
+  --fig-soft: oklch(0.68 0.095 245);
+  --fig-dim: oklch(0.34 0.008 85);
+  --fig-ghost: oklch(0.46 0.008 85);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: oklch(0.205 0.004 85);
+    --surface: oklch(0.245 0.005 85);
+    --surface-2: oklch(0.285 0.005 85);
+    --surface-3: oklch(0.33 0.006 85);
+    --ink: oklch(0.93 0.004 95);
+    --ink-2: oklch(0.82 0.005 95);
+    --muted: oklch(0.68 0.006 95);
+    --line: oklch(0.32 0.005 85);
+    --line-2: oklch(0.42 0.006 85);
+    --accent: oklch(0.87 0.175 93);
+    --accent-ink: oklch(0.2 0.008 85);
+    --accent-soft: oklch(0.37 0.075 92);
+    --danger: oklch(0.72 0.15 27);
+    --ok: oklch(0.76 0.13 150);
+    --stage: oklch(0.87 0.01 92);
+    --thumb: var(--stage);
+    --tile: oklch(0.13 0.005 85);
+    --tile-mark: oklch(0.87 0.175 93);
+    --metal-hi: oklch(0.94 0.004 250);
+    --metal: oklch(0.79 0.009 250);
+    --metal-lo: oklch(0.61 0.014 250);
+    --fig-line: oklch(0.25 0.012 255);
+    --fig-ink: oklch(0.25 0.012 255);
+    --fig-detail: oklch(0.41 0.012 255);
+    --fig-soft: oklch(0.68 0.095 245);
+    --fig-dim: oklch(0.34 0.008 85);
+    --fig-ghost: oklch(0.46 0.008 85);
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-ok: var(--ok);
+  --color-stage: var(--stage);
+  /* Fleet standard: system fonts, no web fonts. Nothing to wait for on one
+     bar of signal at the back of the store. */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 html {
   font-size: 21px;
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
-body {
-  @apply bg-bp-950 text-bp-text antialiased;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='luminanceToAlpha'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.15' intercept='0'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='250' height='250' fill='%23c8d0e0' filter='url(%23n)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(0deg, transparent, transparent 79px, oklch(0.30 0.04 250 / 0.18) 79px, oklch(0.30 0.04 250 / 0.18) 80px),
-    repeating-linear-gradient(90deg, transparent, transparent 79px, oklch(0.30 0.04 250 / 0.18) 79px, oklch(0.30 0.04 250 / 0.18) 80px),
-    repeating-linear-gradient(0deg, transparent, transparent 19px, oklch(0.30 0.04 250 / 0.08) 19px, oklch(0.30 0.04 250 / 0.08) 20px),
-    repeating-linear-gradient(90deg, transparent, transparent 19px, oklch(0.30 0.04 250 / 0.08) 19px, oklch(0.30 0.04 250 / 0.08) 20px);
-  background-attachment: fixed;
+@layer base {
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { color: var(--ink); line-height: 1.12; text-wrap: balance; }
+  h1 { font-weight: 800; letter-spacing: -0.022em; }
+  h2, h3 { font-weight: 750; letter-spacing: -0.012em; }
+  p { text-wrap: pretty; }
+  a { color: inherit; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: var(--corner); }
+  .num, td, .tabular { font-variant-numeric: tabular-nums; }
+  summary { cursor: pointer; }
+  [hidden] { display: none !important; }
+}
+
+@layer components {
+  .wrap { width: 100%; max-width: 74rem; margin-inline: auto; padding-inline: 1rem; }
+  @media (min-width: 640px) { .wrap { padding-inline: 1.5rem; } }
+
+  /* Small label over a value. Sentence case, no tracking. */
+  .label { font-size: 0.68rem; font-weight: 650; color: var(--muted); line-height: 1.3; }
+
+  /* A link is black text on a yellow underline, like a line run over with a
+     highlighter. Yellow alone would not pass as text. */
+  .link { color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 0.16em; text-underline-offset: 0.18em; }
+  .link:hover { background: var(--accent); color: var(--accent-ink); text-decoration-color: transparent; }
+
+  .crumbs { font-size: 0.7rem; color: var(--muted); }
+  .crumbs a { text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 0.18em; }
+  .crumbs a:hover { color: var(--ink); text-decoration-color: var(--accent); }
+
+  /* The yellow tag: what kind of thing this is, as on the front of a bin. */
+  .tag { display: inline-flex; align-items: center; gap: 0.35em; padding: 0.14rem 0.5rem; border-radius: var(--corner); background: var(--accent); color: var(--accent-ink); font-size: 0.66rem; font-weight: 750; line-height: 1.35; white-space: nowrap; }
+  a.tag:hover { background: var(--ink); color: var(--bg); }
+
+  .card { background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--corner); }
+
+  .chip { display: inline-flex; align-items: center; gap: 0.35em; padding: 0.22rem 0.65rem; border: 1px solid var(--line-2); border-radius: var(--corner); font-size: 0.72rem; font-weight: 550; color: var(--ink-2); background: var(--surface); white-space: nowrap; }
+  a.chip:hover, button.chip:hover { border-color: var(--ink); color: var(--ink); }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .chip .n { font-weight: 400; opacity: 0.7; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 2.1rem; padding: 0.35rem 0.85rem; border: 2px solid var(--ink); border-radius: var(--corner); background: var(--surface); color: var(--ink); font-size: 0.76rem; font-weight: 700; line-height: 1.2; cursor: pointer; transition: background 0.12s, color 0.12s; }
+  .btn:hover { background: var(--ink); color: var(--bg); }
+  .btn-icon { width: 2.1rem; padding: 0; border-width: 1px; border-color: var(--line-2); }
+  .btn-icon:hover { border-color: var(--ink); }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: var(--ink); color: var(--accent); }
+
+  .input { width: 100%; min-height: 2.5rem; padding: 0.5rem 0.8rem; border: 2px solid var(--ink); border-radius: var(--corner); background: var(--surface); color: var(--ink); font: inherit; font-size: 0.86rem; appearance: none; }
+  .input::placeholder { color: var(--muted); }
+  .input:focus { outline: 3px solid var(--accent); outline-offset: 1px; }
+  select.input { padding-right: 2.2rem; background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 1.05rem) 50%, calc(100% - 0.75rem) 50%; background-size: 0.3rem 0.3rem; background-repeat: no-repeat; }
+
+  /* A section starts with its name and a short yellow rule. */
+  .section-title { font-size: 1.08rem; margin-bottom: 0.8rem; scroll-margin-top: 5rem; }
+  .section-title::after { content: ""; display: block; width: 2rem; height: 0.2rem; margin-top: 0.4rem; background: var(--accent); }
+
+  /* Facts: a label, the value, and a line saying what the value means. */
+  .facts { display: grid; gap: 0.6rem; }
+  .fact { padding: 0.65rem 0.8rem 0.75rem; background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--corner); min-width: 0; }
+  .fact .v { font-size: 1.12rem; font-weight: 750; letter-spacing: -0.012em; line-height: 1.2; margin-top: 0.1rem; }
+  .fact .s { font-size: 0.72rem; color: var(--ink-2); line-height: 1.45; margin-top: 0.25rem; }
+  a.fact:hover { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+
+  .table { width: 100%; border-collapse: collapse; font-size: 0.74rem; }
+  .table th { text-align: left; font-weight: 700; color: var(--ink); font-size: 0.7rem; padding: 0.55rem 0.7rem; background: var(--surface-2); border-bottom: 2px solid var(--ink); white-space: nowrap; }
+  .table td { padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .table tr:last-child td, .table tr:last-child tbody th { border-bottom: 0; }
+  .table tbody th { vertical-align: top; background: transparent; border-bottom: 1px solid var(--line); font-size: 0.74rem; }
+  .table tbody tr:last-child th { border-bottom: 0; }
+  /* Wide tables keep one line per row and scroll inside their box. */
+  .table--nowrap td, .table--nowrap tbody th { white-space: nowrap; }
+  .table tbody tr:hover td, .table tbody tr:hover th { background: var(--surface-2); }
+  .table td.diff { background: var(--accent-soft); }
+  /* Scroll shadows: an edge shadow appears only on the side with more to scroll. */
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--line-2);
+    border-radius: var(--corner);
+    --ts-bg: var(--surface);
+    --ts-shadow: color-mix(in oklch, var(--ink) 22%, transparent);
+    background:
+      linear-gradient(to right, var(--ts-bg) 35%, transparent) left center / 2.5rem 100% no-repeat local,
+      linear-gradient(to left, var(--ts-bg) 35%, transparent) right center / 2.5rem 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, var(--ts-shadow), transparent) left center / 0.85rem 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, var(--ts-shadow), transparent) right center / 0.85rem 100% no-repeat scroll,
+      var(--ts-bg);
+  }
+
+  .callout { border: 1px solid var(--line-2); border-left: 0.3rem solid var(--accent); border-radius: var(--corner); padding: 0.7rem 0.9rem; background: var(--surface); }
+
+
+  /* What it is used for, and what it is not for. The mark is a shape as well
+     as a color, and each list has its own heading. */
+  .ticks { list-style: none; padding: 0; margin: 0; }
+  .ticks li { display: grid; grid-template-columns: 1.3rem 1fr; padding: 0.38rem 0; border-bottom: 1px solid var(--line); }
+  .ticks li:last-child { border-bottom: 0; }
+  .ticks li::before { content: "\2713"; color: var(--ok); font-weight: 800; }
+  .ticks.no li::before { content: "\2715"; color: var(--danger); }
+
+  /* Questions and answers. */
+  .qa { border-top: 1px solid var(--line-2); }
+  .qa details { border-bottom: 1px solid var(--line-2); }
+  .qa summary { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: baseline; padding: 0.75rem 0; font-size: 0.88rem; font-weight: 650; list-style: none; }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after { content: "+"; font-weight: 500; font-size: 1.1rem; line-height: 1; color: var(--muted); }
+  .qa details[open] summary::after { content: "\2212"; }
+  .qa summary:hover::after { color: var(--ink); }
+  .qa details > div { color: var(--ink-2); padding: 0 2rem 0.95rem 0; max-width: 42rem; }
+
+  /* Long-form text. */
+  .prose { line-height: 1.65; color: var(--ink-2); max-width: 38rem; }
+  .prose > * + * { margin-top: 0.85em; }
+  .prose h2 { font-size: 1.08rem; margin-top: 2em; color: var(--ink); scroll-margin-top: 5rem; }
+  .prose a { color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 0.16em; text-underline-offset: 0.18em; }
+  .prose a:hover { background: var(--accent); color: var(--accent-ink); text-decoration-color: transparent; }
+  .prose ul { list-style: disc; padding-left: 1.2rem; }
+  .prose li + li { margin-top: 0.3em; }
+  .prose strong { color: var(--ink); font-weight: 700; }
+
+  /* ── Pictures ───────────────────────────────────────────────────────────
+     Every picture is generated by src/lib/figure. A figure describes its
+     lines by kind, and this is where a kind becomes a look: the part is a
+     solid piece of metal with a dark outline, threads and knurling are fine
+     lines on it, plastic and rubber are blue, and a dashed outline is a part
+     in its other position. Strokes do not scale with the picture, so a
+     thumbnail keeps the same line weights as the full-size one.
+
+     The metal fill is the #metal gradient defined once in BaseLayout.astro.
+     It spans each shape's own width, so a head and a shank each read as a
+     round bar with a highlight down the left. */
+  .fig { display: block; flex: none; overflow: visible; max-width: 100%; height: auto; }
+  .fig path { vector-effect: non-scaling-stroke; fill: none; stroke: var(--fig-line); stroke-linejoin: round; stroke-linecap: round; }
+  .fig .f-body { fill: url(#metal) var(--metal); fill-rule: evenodd; stroke-width: 1.5px; }
+  .fig .f-soft { fill: var(--fig-soft); fill-rule: evenodd; stroke-width: 1.5px; }
+  .fig .f-ink { fill: var(--fig-ink); stroke: var(--fig-ink); stroke-width: 0.7px; }
+  .fig .f-edge { stroke-width: 1.5px; }
+  .fig .f-thin { stroke: var(--fig-detail); stroke-width: 0.8px; }
+  .fig .f-hatch { stroke: var(--fig-detail); stroke-width: 0.6px; stroke-linecap: butt; opacity: 0.6; }
+  .fig .f-phantom { stroke: var(--fig-ghost); stroke-width: 1px; stroke-dasharray: 5 3.5; stroke-linecap: butt; }
+  .fig .f-dim { stroke: var(--fig-dim); stroke-width: 1px; stroke-linecap: butt; }
+  .fig .f-arrow { fill: var(--fig-dim); stroke: none; }
+  .fig--mini .f-body, .fig--mini .f-soft, .fig--mini .f-edge { stroke-width: 1.15px; }
+  .fig.fig--ghost path { fill: none; stroke: var(--fig-ghost); stroke-width: 1.2px; stroke-dasharray: 5 3.5; stroke-linecap: butt; }
+
+  .figure { position: relative; flex: none; max-width: 100%; }
+  .figure .fig { width: 100%; }
+  /* A measurement named on the picture, in the word the size table uses. */
+  .dimword { position: absolute; transform: translate(-50%, -50%); padding: 0.16rem 0.36rem; border-radius: var(--corner); background: var(--accent); color: var(--accent-ink); font-size: 0.62rem; font-weight: 750; line-height: 1; white-space: nowrap; }
+
+  /* A wall of bins: one picture and one name each. */
+  .bins { display: grid; gap: 0.6rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 520px) { .bins { grid-template-columns: repeat(auto-fill, minmax(8.4rem, 1fr)); } }
+  /* Each bin spans two rows of the wall (picture, then name) and takes them
+     from it, so every name in a row starts on the same line however tall the
+     pictures above are. */
+  .bin { display: grid; grid-template-rows: subgrid; grid-row: span 2; row-gap: 0; background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--corner); min-width: 0; overflow: hidden; }
+  .bin .stage { display: flex; align-items: center; justify-content: center; min-height: 11.4rem; padding: 0.9rem 0.5rem 0.7rem; background: var(--stage); }
+  .bins--flat .bin .stage { min-height: 8.8rem; }
+  .bin .cap { padding: 0.55rem 0.7rem 0.65rem; border-top: 1px solid var(--line); min-height: 4.4rem; }
+  .bin .cap .n { font-size: 0.8rem; font-weight: 750; line-height: 1.22; letter-spacing: -0.005em; }
+  .bin .cap .m { font-size: 0.68rem; color: var(--muted); line-height: 1.4; margin-top: 0.2rem; }
+  a.bin:hover, a.bin:focus-visible { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+  a.bin:hover .n { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 0.16em; text-underline-offset: 0.18em; }
+
+  /* The opening picture on the home page: one row of parts, heads on a
+     common line. It never wraps, because the last part left alone on a row
+     of its own reads as a mistake. The gaps are a share of the row and the
+     parts shrink in proportion to their widths, so the row scales as one
+     picture and every part stays at the same scale as its neighbors. */
+  .lineup { display: flex; align-items: flex-start; justify-content: center; column-gap: min(4.2%, 1.25rem); padding: 1.5rem 0.75rem; background: var(--stage); }
+  .lineup .fig { flex: 0 1 auto; min-width: 0; }
+  @media (min-width: 640px) { .lineup { padding: 1.75rem 1.25rem; } }
+
+  /* The five kinds on the home page. A row each on a phone, picture beside
+     the words; a column each once there is room for five across. */
+  .kinds { display: grid; gap: 0.6rem; }
+  .kind { display: grid; grid-template-columns: 5rem minmax(0, 1fr); background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--corner); overflow: hidden; min-width: 0; }
+  .kind-pic { display: flex; align-items: center; justify-content: center; padding: 0.6rem 0.4rem; background: var(--stage); border-right: 1px solid var(--line); min-height: 7rem; }
+  .kind-text { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.7rem 0.85rem 0.8rem; }
+  .kind-name { font-size: 1.12rem; font-weight: 800; letter-spacing: -0.015em; line-height: 1.15; }
+  .kind-what { font-size: 0.76rem; color: var(--ink-2); line-height: 1.42; }
+  .kind-count { font-size: 0.7rem; color: var(--muted); margin-top: auto; padding-top: 0.15rem; }
+  a.kind:hover, a.kind:focus-visible { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+  a.kind:hover .kind-name { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 0.16em; text-underline-offset: 0.18em; }
+  @media (min-width: 640px) { .kinds { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) {
+    .kinds { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .kind { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .kind-pic { border-right: 0; border-bottom: 1px solid var(--line); height: 9rem; }
+  }
+
+  /* The big picture on an entry page. */
+  .picture { background: var(--stage); border: 1px solid var(--line-2); border-radius: var(--corner); overflow: hidden; }
+  .picture-stage { display: flex; align-items: center; justify-content: center; padding: 1.6rem 1rem; min-height: 15rem; }
+  .picture figcaption { padding: 0.6rem 0.8rem 0.7rem; border-top: 1px solid var(--line); font-size: 0.7rem; line-height: 1.5; color: var(--ink-2); background: var(--surface); }
+
+  /* An entry page: name, then picture, then the facts. Beside each other
+     once there is room, with the picture staying in view. */
+  .entry { display: grid; gap: 1.25rem; grid-template-areas: "head" "pic" "body"; }
+  .entry > .entry-head { grid-area: head; min-width: 0; }
+  .entry > .entry-pic { grid-area: pic; min-width: 0; }
+  .entry > .entry-body { grid-area: body; min-width: 0; }
+  @media (min-width: 1024px) {
+    .entry { grid-template-columns: minmax(0, 21.5rem) minmax(0, 1fr); grid-template-areas: "pic head" "pic body"; column-gap: 2.4rem; row-gap: 1.6rem; align-items: start; }
+    .entry > .entry-pic { position: sticky; top: 4.4rem; }
+  }
+
+  /* One-line entries: picture, name, what it is. */
+  .rows { border-top: 1px solid var(--line-2); }
+  .row { display: grid; grid-template-columns: 3.8rem minmax(0, 1fr) auto; gap: 0.9rem; align-items: center; padding: 0.6rem 0.4rem; border-bottom: 1px solid var(--line-2); }
+  .row:hover { background: var(--surface); }
+  .row:hover .n { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 0.16em; text-underline-offset: 0.18em; }
+  .row .pic { display: flex; align-items: center; justify-content: center; height: 3.8rem; }
+  /* A small picture beside its name. The longest parts are scaled down to
+     stay on their piece of paper. */
+  .row .pic, .thumb { background: var(--thumb); border-radius: var(--corner); }
+  .row .pic .fig, .thumb .fig { max-height: calc(100% - 0.4rem); }
+  .row .n { font-size: 0.88rem; font-weight: 750; }
+  .row .d { font-size: 0.74rem; color: var(--ink-2); line-height: 1.45; margin-top: 0.1rem; }
+  .row mark { background: var(--accent); color: var(--accent-ink); padding: 0 0.1em; border-radius: var(--corner); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+@media print {
+  header, footer, .no-print { display: none !important; }
+  body { background: white; color: black; font-size: 10pt; }
 }

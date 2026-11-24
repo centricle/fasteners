@@ -1,0 +1,140 @@
+---
+// One kind of fastener: every type as a picture with its name, the same
+// types in one table, and the questions people ask about them.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BreadcrumbSchema from './BreadcrumbSchema.astro';
+import Figure from './Figure.astro';
+import { CATEGORIES, category, label, sizeText, traits } from '../utils/catalog';
+import { COPY } from '../utils/copy';
+
+interface Props {
+  category: string;
+}
+
+const cat = category(Astro.props.category);
+const copy = COPY[cat.key];
+const flat = cat.key === 'nuts' || cat.key === 'washers';
+
+type Row = Record<string, any>;
+const none = (v: string | undefined) => (!v || v === 'none' ? 'None' : label(v));
+const list = (v: string[] | undefined) => (v?.length ? v.join(', ') : '');
+
+const COLUMNS: Record<string, { head: string; cell: (f: Row) => string }[]> = {
+  screws: [
+    { head: 'Head', cell: (f) => none(f.headStyle) },
+    { head: 'Drive', cell: (f) => none(f.driveType) },
+    { head: 'Thread', cell: (f) => none(f.threadType) },
+    { head: 'Point', cell: (f) => none(f.pointType) },
+    { head: 'Diameter', cell: (f) => sizeText(f.diameterRange, 'diameter') },
+    { head: 'Length', cell: (f) => sizeText(f.lengthRange) },
+    { head: 'Standards', cell: (f) => list(f.standards) },
+  ],
+  bolts: [
+    { head: 'Head', cell: (f) => none(f.headStyle) },
+    { head: 'Thread', cell: (f) => none(f.threadType) },
+    { head: 'Needs a nut', cell: (f) => (f.nutRequired ? 'Yes' : 'No') },
+    { head: 'Diameter', cell: (f) => sizeText(f.diameterRange, 'diameter') },
+    { head: 'Length', cell: (f) => sizeText(f.lengthRange) },
+    { head: 'Standards', cell: (f) => list(f.standards) },
+  ],
+  anchors: [
+    { head: 'Goes into', cell: (f) => f.baseMaterial.map((m: string) => label(m)).join(', ') },
+    { head: 'Holds, pulling out', cell: (f) => (f.loadCapacity?.tension ? `${f.loadCapacity.tension.toLocaleString('en-US')} ${f.loadCapacity.unit}` : '') },
+    { head: 'Holds, sideways', cell: (f) => (f.loadCapacity?.shear ? `${f.loadCapacity.shear.toLocaleString('en-US')} ${f.loadCapacity.unit}` : '') },
+    { head: 'Diameter', cell: (f) => sizeText(f.diameterRange, 'diameter') },
+    { head: 'Length', cell: (f) => sizeText(f.lengthRange) },
+  ],
+  nuts: [
+    { head: 'Locking', cell: (f) => none(f.lockingMechanism) },
+    { head: 'Thread', cell: (f) => none(f.threadType) },
+    { head: 'Thread size', cell: (f) => sizeText(f.diameterRange, 'diameter') },
+    { head: 'Standards', cell: (f) => list(f.standards) },
+  ],
+  washers: [
+    { head: 'Kind', cell: (f) => none(f.washerType) },
+    { head: 'Hole', cell: (f) => sizeText(f.innerDiameterRange) },
+    { head: 'Outside', cell: (f) => sizeText(f.outerDiameterRange) },
+    { head: 'Thickness', cell: (f) => sizeText(f.thicknessRange, 'thickness') },
+    { head: 'Standards', cell: (f) => list(f.standards) },
+  ],
+};
+const columns = COLUMNS[cat.key];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: copy.faq.map((x) => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } })),
+};
+---
+
+<BaseLayout title={`${cat.name}: types, sizes and specifications`} description={copy.description}>
+  <BreadcrumbSchema items={[{ label: cat.name }]} />
+  <div class="wrap pt-5">
+    <nav class="crumbs mb-5" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span> <span class="text-ink" aria-current="page">{cat.name}</span>
+    </nav>
+
+    <header class="mb-6">
+      <h1 class="text-[1.9rem] sm:text-[2.3rem]">{cat.name}</h1>
+      <p class="mt-2.5 text-[0.98rem] leading-[1.5] text-ink-2 max-w-[38rem]">{copy.what}</p>
+      <nav class="flex flex-wrap gap-1.5 mt-4" aria-label="Kinds of fastener">
+        {CATEGORIES.map((c) => (
+          <a href={`/${c.key}`} class:list={['chip', c.key === cat.key && 'on']} aria-current={c.key === cat.key ? 'page' : undefined}>{c.name} <span class="n">{c.items.length}</span></a>
+        ))}
+      </nav>
+    </header>
+
+    <section class="mb-14" aria-label={`Types of ${cat.name.toLowerCase()}`}>
+      <div class:list={['bins', flat && 'bins--flat']}>
+        {cat.items.map((f) => (
+          <a class="bin" href={`/${cat.key}/${f.slug}`}>
+            <div class="stage"><Figure category={cat.key} slug={f.slug} variant="card" scale={flat ? 0.15 : 0.115} /></div>
+            <div class="cap">
+              <div class="n">{f.name}</div>
+              <div class="m">{traits(f).slice(0, 2).join(' · ')}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+      <p class="text-[0.72rem] text-muted mt-3 max-w-[42rem]">
+        {cat.items.length} types of {cat.name.toLowerCase()}. The pictures share one thread size, so a head or a hole can be compared from one to the next. None are actual size.
+      </p>
+    </section>
+
+    <section class="mb-14">
+      <h2 class="section-title">All {cat.items.length} side by side</h2>
+      <div class="table-scroll">
+        <table class="table table--nowrap">
+          <thead>
+            <tr>
+              <th scope="col">Type</th>
+              {columns.map((c) => <th scope="col">{c.head}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {cat.items.map((f) => (
+              <tr>
+                <th scope="row"><a href={`/${cat.key}/${f.slug}`} class="link">{f.name}</a></th>
+                {columns.map((c) => <td>{c.cell(f)}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Questions about {cat.name.toLowerCase()}</h2>
+      <div class="qa">
+        {copy.faq.map((x) => (
+          <details>
+            <summary>{x.q}</summary>
+            <div>{x.a}</div>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</BaseLayout>

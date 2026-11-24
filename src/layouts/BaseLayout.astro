@@ -1,6 +1,11 @@
 ---
+import '../styles/global.css';
+import Mark from '../components/Mark.astro';
+
 interface Props {
   title: string;
+  /** Use `title` as the whole <title>, without the site suffix. */
+  bare?: boolean;
   description?: string;
   /** Override when this URL duplicates a page that lives in another category. */
   canonical?: string;
@@ -8,11 +13,27 @@ interface Props {
 
 const {
   title,
-  description = "Comprehensive fastener specifications database - screws, bolts, anchors, and nuts.",
+  bare = false,
+  description = 'What each screw, bolt, nut, washer and anchor looks like, what it is for and the sizes it comes in.',
   canonical,
 } = Astro.props;
 
+const fullTitle = bare ? title : `${title} | fasteners.fyi`;
 const canonicalUrl = canonical ? new URL(canonical, Astro.site ?? Astro.url).href : Astro.url.href;
+
+// `wide` links wait for a wider header; they are in the menu and the footer.
+const nav = [
+  { href: '/screws', label: 'Screws' },
+  { href: '/bolts', label: 'Bolts' },
+  { href: '/anchors', label: 'Anchors' },
+  { href: '/nuts', label: 'Nuts' },
+  { href: '/washers', label: 'Washers' },
+  { href: '/compare', label: 'Compare' },
+  { href: '/sizes', label: 'Sizes', wide: true },
+  { href: '/about', label: 'About', wide: true },
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const active = (href: string) => path === href || path.startsWith(href + '/');
 ---
 
 <!doctype html>
@@ -22,10 +43,13 @@ const canonicalUrl = canonical ? new URL(canonical, Astro.site ?? Astro.url).hre
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | fasteners.fyi</title>
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f5f4f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#181715" media="(prefers-color-scheme: dark)" />
+    <title>{fullTitle}</title>
 
     <!-- Open Graph -->
-    <meta property="og:title" content={`${title} | fasteners.fyi`} />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
@@ -34,13 +58,22 @@ const canonicalUrl = canonical ? new URL(canonical, Astro.site ?? Astro.url).hre
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${title} | fasteners.fyi`} />
+    <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://fasteners.fyi/og-image.webp" />
 
     <!-- SEO -->
     <link rel="canonical" href={canonicalUrl} />
     <meta name="robots" content="index, follow" />
+
+    <!-- Theme, before first paint -->
+    <script is:inline>
+      // A ?theme=light or ?theme=dark link shows that theme without saving it.
+      try {
+        const t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7YTFBKYLFW"></script>
@@ -50,131 +83,154 @@ const canonicalUrl = canonical ? new URL(canonical, Astro.site ?? Astro.url).hre
       gtag('js', new Date());
       gtag('config', 'G-7YTFBKYLFW');
     </script>
+    <slot name="head" />
   </head>
   <body class="min-h-screen flex flex-col">
-    <header class="border-b border-bp-700 bg-bp-900/60 backdrop-blur-sm sticky top-0 z-50">
-      <nav class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-bp-800 border border-bp-700 flex items-center justify-center">
-            <svg class="w-5 h-5 text-accent-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12,3 20.2,7.5 20.2,16.5 12,21 3.8,16.5 3.8,7.5"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-          </div>
-          <span class="text-lg"><span class="text-accent-400">fasteners</span><span class="text-white font-bold">.fyi</span></span>
-        </a>
-        <!-- Desktop Navigation -->
-        <div class="hidden md:flex gap-6 text-sm">
-          <a href="/screws" class="text-bp-text-muted hover:text-bp-text transition-colors">Screws</a>
-          <a href="/bolts" class="text-bp-text-muted hover:text-bp-text transition-colors">Bolts</a>
-          <a href="/anchors" class="text-bp-text-muted hover:text-bp-text transition-colors">Anchors</a>
-          <a href="/nuts" class="text-bp-text-muted hover:text-bp-text transition-colors">Nuts</a>
-          <a href="/washers" class="text-bp-text-muted hover:text-bp-text transition-colors">Washers</a>
-          <a href="/search" class="text-bp-text-muted hover:text-bp-text transition-colors">Search</a>
-          <a href="/compare" class="text-bp-text-muted hover:text-bp-text transition-colors">Compare</a>
-          <a href="/about" class="text-bp-text-muted hover:text-bp-text transition-colors">About</a>
-        </div>
+    <!-- The metal every picture is filled with (.fig .f-body in global.css).
+         It runs across each shape's own width: shadow at the left edge, a
+         highlight a third of the way in, shadow again at the right. -->
+    <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" style="stop-color:var(--metal-lo)" />
+          <stop offset="0.3" style="stop-color:var(--metal-hi)" />
+          <stop offset="0.6" style="stop-color:var(--metal)" />
+          <stop offset="1" style="stop-color:var(--metal-lo)" />
+        </linearGradient>
+      </defs>
+    </svg>
 
-        <!-- Mobile Menu Button -->
-        <button
-          class="md:hidden flex items-center justify-center w-10 h-10 text-bp-text-muted hover:text-bp-text"
-          aria-label="Open navigation menu"
-          aria-expanded="false"
-          id="mobile-menu-button"
-        >
-          <svg class="w-6 h-6 hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5h16"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19h16"/>
-          </svg>
-          <svg class="w-6 h-6 close-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6 6 18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6 6 12 12"/>
-          </svg>
-        </button>
-      </nav>
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 z-50 btn">Skip to content</a>
+    <header class="sticky top-0 z-40 border-b border-line-2 bg-bg">
+      <div class="wrap flex items-center gap-3 lg:gap-5 h-[3.4rem]">
+        <a href="/" class="flex items-center gap-2 shrink-0" aria-label="fasteners.fyi home">
+          <Mark class="w-[34px] h-[34px]" />
+          <span class="text-[0.92rem] font-extrabold tracking-[-0.02em]">fasteners<span class="text-muted font-semibold">.fyi</span></span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-stretch self-stretch text-[0.74rem] font-semibold" aria-label="Main">
+          {nav.map((n) => (
+            <a href={n.href} class:list={['items-center px-2 lg:px-2.5 border-b-[3px] border-t-[3px] border-t-transparent transition-colors', n.wide ? 'hidden lg:flex' : 'flex', active(n.href) ? 'text-ink border-b-accent' : 'text-ink-2 border-b-transparent hover:text-ink hover:border-b-line-2']} aria-current={active(n.href) ? 'page' : undefined}>{n.label}</a>
+          ))}
+        </nav>
+
+        <div class="ml-auto flex items-center gap-2">
+          <a href="/search" class="btn btn-icon lg:w-auto lg:px-3 lg:gap-2" aria-label="Search fasteners">
+            <svg class="w-[1.05rem] h-[1.05rem]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+            <span class="hidden lg:inline">Search</span>
+          </a>
+          <button type="button" id="theme-toggle" class="btn btn-icon" aria-label="Switch between light and dark" title="Switch between light and dark">
+            <svg class="w-[1.05rem] h-[1.05rem]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor" /></svg>
+          </button>
+          <!-- Mobile Menu Button -->
+          <button type="button" id="mobile-menu-button" class="md:hidden btn btn-icon" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open navigation menu">
+            <svg id="hamburger-icon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+            <svg id="close-icon" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          </button>
+        </div>
+      </div>
 
       <!-- Mobile Navigation Menu -->
-      <div class="md:hidden hidden" id="mobile-menu">
-        <div class="px-4 pt-2 pb-3 space-y-1 border-t border-bp-700">
-          <a href="/screws" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Screws</a>
-          <a href="/bolts" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Bolts</a>
-          <a href="/anchors" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Anchors</a>
-          <a href="/nuts" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Nuts</a>
-          <a href="/washers" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Washers</a>
-          <a href="/search" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Search</a>
-          <a href="/compare" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">Compare</a>
-          <a href="/about" class="block px-3 py-3 text-bp-text-muted hover:text-bp-text text-base font-medium">About</a>
-        </div>
+      <div id="mobile-menu" class="hidden md:hidden border-t border-line bg-bg">
+        <nav class="wrap py-2 flex flex-col text-[0.92rem] font-semibold" aria-label="Mobile">
+          {nav.map((n) => <a href={n.href} class="py-2.5 border-b border-line">{n.label}</a>)}
+          <a href="/search" class="py-2.5">Search</a>
+        </nav>
       </div>
     </header>
 
-    <main class="flex-1">
+    <main id="main" class="flex-1">
       <slot />
     </main>
 
-    <footer class="border-t border-bp-700 mt-auto">
-      <div class="max-w-6xl mx-auto px-4 py-8">
-        <div class="text-sm text-bp-text-faint text-center mb-4 flex flex-wrap justify-center gap-2 items-center">
-          <span class="font-medium">See also:</span>
-          <a href="https://batteries.fyi" class="hover:text-bp-text transition-colors">Batteries</a>
-          <span class="text-bp-text-faint/50">·</span>
-          <a href="https://cables.fyi" class="hover:text-bp-text transition-colors">Cables</a>
+    <footer class="border-t border-line-2 mt-16">
+      <div class="wrap py-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 text-[0.76rem]">
+        <div class="lg:col-span-2 max-w-sm">
+          <a href="/" class="inline-flex items-center gap-2 font-extrabold text-ink mb-2"><Mark class="w-[20px] h-[20px]" />fasteners.fyi</a>
+          <p class="text-muted leading-relaxed">What each screw, bolt, nut, washer and anchor looks like, what it is for and the sizes it comes in. Open data, MIT licensed.</p>
         </div>
-        <div class="pt-4 flex justify-center mb-4">
-          <a href="https://centricle.com" title="made by ksmith" aria-label="made by ksmith">
+        <div>
+          <p class="font-bold mb-2">Fasteners</p>
+          <ul class="space-y-1.5 text-ink-2">
+            <li><a class="hover:text-ink hover:underline" href="/screws">Screws</a></li>
+            <li><a class="hover:text-ink hover:underline" href="/bolts">Bolts</a></li>
+            <li><a class="hover:text-ink hover:underline" href="/anchors">Anchors</a></li>
+            <li><a class="hover:text-ink hover:underline" href="/nuts">Nuts</a></li>
+            <li><a class="hover:text-ink hover:underline" href="/washers">Washers</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-bold mb-2">More</p>
+          <ul class="space-y-1.5 text-ink-2">
+            <li><a class="hover:text-ink hover:underline" href="/search">Search</a></li>
+            <li><a class="hover:text-ink hover:underline" href="/compare">Compare two fasteners</a></li>
+            <li><a class="hover:text-ink hover:underline" href="/sizes">How to read a size</a></li>
+            <li><a class="hover:text-ink hover:underline" href="/about">About</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="wrap pb-8 text-[0.7rem] text-muted">
+        <div class="flex flex-wrap justify-center gap-2 items-center mb-5">
+          <span>See also:</span>
+          <a href="https://batteries.fyi" class="hover:text-ink hover:underline">Batteries</a>
+          <span aria-hidden="true">&middot;</span>
+          <a href="https://cables.fyi" class="hover:text-ink hover:underline">Cables</a>
+        </div>
+        <div class="relative flex items-center justify-between border-t border-line pt-5">
+          <span>&copy; {new Date().getFullYear()} Centricle LLC &middot; fasteners.fyi</span>
+          <a href="https://centricle.com" title="made by ksmith" aria-label="made by ksmith" class="absolute left-1/2 -translate-x-1/2">
             <img src="https://centricle.com/brand/avatar-sm.jpg" alt="" width="28" height="28" class="w-7 h-7 rounded-full" loading="lazy" />
           </a>
-        </div>
-        <div class="flex items-center justify-between text-sm text-bp-text-faint">
-          <span>&copy; {new Date().getFullYear()} Centricle LLC &middot; fasteners.fyi</span>
+          <span>MIT licensed</span>
         </div>
       </div>
     </footer>
+
+    <script>
+      // Theme: light or dark, following the system until the button is used.
+      document.getElementById('theme-toggle')?.addEventListener('click', () => {
+        const root = document.documentElement;
+        const sysDark = matchMedia('(prefers-color-scheme: dark)').matches;
+        const cur = root.dataset.theme ?? (sysDark ? 'dark' : 'light');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+
+      // "/" jumps to search from anywhere except a text field.
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+        const t = e.target as HTMLElement | null;
+        if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+        e.preventDefault();
+        const field = document.getElementById('search-input') as HTMLInputElement | null;
+        if (field) field.focus();
+        else location.href = '/search';
+      });
+
+      // Mobile menu (fleet pattern: Escape, click-outside, icon swap, focus).
+      const button = document.getElementById('mobile-menu-button');
+      const menu = document.getElementById('mobile-menu');
+      const ham = document.getElementById('hamburger-icon');
+      const close = document.getElementById('close-icon');
+      let open = false;
+      const toggle = () => {
+        open = !open;
+        menu?.classList.toggle('hidden', !open);
+        button?.setAttribute('aria-expanded', String(open));
+        button?.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+        ham?.classList.toggle('hidden', open);
+        close?.classList.toggle('hidden', !open);
+        if (open) (menu?.querySelector('a') as HTMLElement | null)?.focus();
+        else button?.focus();
+      };
+      button?.addEventListener('click', toggle);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) toggle(); });
+      document.addEventListener('click', (e) => {
+        if (open && menu && button && !menu.contains(e.target as Node) && !button.contains(e.target as Node)) toggle();
+      });
+      menu?.addEventListener('click', (e) => { if ((e.target as HTMLElement).tagName === 'A' && open) toggle(); });
+    </script>
   </body>
 </html>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const button = document.getElementById('mobile-menu-button');
-    const menu = document.getElementById('mobile-menu');
-    if (!button || !menu) return;
-
-    const hamburgerIcon = button.querySelector('.hamburger-icon');
-    const closeIcon = button.querySelector('.close-icon');
-    let isOpen = false;
-
-    function toggleMenu() {
-      isOpen = !isOpen;
-      menu.classList.toggle('hidden', !isOpen);
-      button.setAttribute('aria-expanded', isOpen.toString());
-      button.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
-      if (hamburgerIcon && closeIcon) {
-        hamburgerIcon.classList.toggle('hidden', isOpen);
-        closeIcon.classList.toggle('hidden', !isOpen);
-      }
-      if (isOpen) {
-        const firstLink = menu.querySelector('a');
-        if (firstLink) firstLink.focus();
-      } else {
-        button.focus();
-      }
-    }
-
-    function closeMenu() {
-      if (isOpen) toggleMenu();
-    }
-
-    button.addEventListener('click', toggleMenu);
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && isOpen) closeMenu();
-    });
-    document.addEventListener('click', function(e) {
-      if (isOpen && !menu.contains(e.target) && !button.contains(e.target)) closeMenu();
-    });
-    menu.addEventListener('click', function(e) {
-      if (e.target.tagName === 'A') closeMenu();
-    });
-  });
-</script>
-
-<style is:global>
-  @import "../styles/global.css";
-</style>

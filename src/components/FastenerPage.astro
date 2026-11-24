@@ -1,0 +1,237 @@
+---
+// One fastener: its name, a picture with the measurements named on it, and
+// the facts in the order someone holding one asks them. What is it, what is
+// it for, what sizes does it come in, what is it made of, what is it like.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BreadcrumbSchema from './BreadcrumbSchema.astro';
+import Figure from './Figure.astro';
+import { figure } from '../lib/figure';
+import { CATEGORIES, category, label, size, type SizeKind } from '../utils/catalog';
+import { GLOSS } from '../utils/copy';
+import { canonicalFor } from '../utils/canonical';
+import type { DimensionRange, Fastener } from '../types/fastener';
+
+interface Props {
+  category: string;
+  item: Fastener;
+}
+
+const cat = category(Astro.props.category);
+const f = Astro.props.item as Fastener & Record<string, any>;
+const fig = figure(cat.key, f.slug);
+const keyed = (key: string) => fig?.dims.find((d) => d.key === key);
+
+const none = (v: string | undefined) => (!v || v === 'none' ? 'None' : label(v));
+
+// What it is, at a glance. `s` says what the word means.
+const attrs: { k: string; v: string; s?: string }[] = [];
+if (cat.key === 'washers') attrs.push({ k: 'Kind', v: none(f.washerType) });
+if (cat.key === 'anchors') attrs.push({ k: 'Goes into', v: f.baseMaterial.map((m: string) => label(m)).join(', ') });
+if (cat.key === 'nuts') attrs.push({ k: 'Shape', v: none(f.headStyle) }, { k: 'Locking', v: none(f.lockingMechanism) });
+if (cat.key === 'screws' || cat.key === 'bolts' || cat.key === 'anchors') {
+  const hexHead = f.headStyle === 'hex' && f.driveType === 'hex';
+  attrs.push({ k: 'Head', v: none(f.headStyle), s: GLOSS.head[f.headStyle] }, { k: 'Drive', v: none(f.driveType), s: GLOSS.drive[hexHead ? 'hex-head' : f.driveType] });
+}
+// A nut is the threaded hole, so the line about what a thread fits is left off it.
+if (cat.key !== 'washers') attrs.push({ k: 'Thread', v: none(f.threadType), s: cat.key === 'nuts' ? undefined : GLOSS.thread[f.threadType] });
+if (cat.key === 'screws' && f.pointType) attrs.push({ k: 'Point', v: none(f.pointType), s: GLOSS.point[f.pointType] });
+if (cat.key === 'bolts') {
+  attrs.push({ k: 'Needs a nut', v: f.nutRequired ? 'Yes' : 'No' });
+  if (f.washerRecommended !== undefined) attrs.push({ k: 'Washer', v: f.washerRecommended ? 'Recommended' : 'Optional' });
+}
+
+// Sizes. `key` ties a size to the measurement marked on the picture, and
+// `word` is what the picture calls it.
+const dims: { key: string; name: string; word: string; kind: SizeKind; r: DimensionRange | undefined }[] =
+  cat.key === 'washers'
+    ? [
+        { key: 'ID', name: 'Hole (inside diameter)', word: 'Hole', kind: 'length', r: f.innerDiameterRange },
+        { key: 'OD', name: 'Outside diameter', word: 'Outside', kind: 'length', r: f.outerDiameterRange },
+        { key: 'T', name: 'Thickness', word: 'Thickness', kind: 'thickness', r: f.thicknessRange },
+      ]
+    : [
+        { key: 'd', name: cat.key === 'nuts' ? 'Thread size' : 'Diameter', word: cat.key === 'nuts' ? 'Thread size' : 'Diameter', kind: 'diameter', r: f.diameterRange },
+        { key: 'L', name: 'Length', word: 'Length', kind: 'length', r: f.lengthRange },
+      ];
+const shown = dims.filter((d) => d.r).map((d) => ({ ...d, v: size(d.r, d.kind)!, dim: keyed(d.key) }));
+const words = Object.fromEntries(dims.map((d) => [d.key, d.word]));
+const systems = (f.measurementSystem as string[]).map((s) => (s === 'imperial' ? 'inch' : s));
+
+const LOCKING: Record<string, string> = {
+  'nylon-insert': 'Nylon ring deforms around bolt threads to resist loosening. Single-use recommended.',
+  serrated: 'Serrated flange bites into mating surface to resist rotation.',
+  'prevailing-torque': 'All-metal design maintains locking torque through thread distortion.',
+};
+
+const everything = CATEGORIES.flatMap((c) => c.items.map((item) => ({ c, item })));
+const related = (f.relatedFasteners ?? [])
+  .map((slug: string) => everything.find((x) => x.c.key === cat.key && x.item.slug === slug) ?? everything.find((x) => x.item.slug === slug))
+  .filter(Boolean) as { c: (typeof CATEGORIES)[number]; item: Fastener }[];
+
+const VIEWS: Record<string, string> = {
+  screws: 'From the side and from above.',
+  bolts: 'From the side and from above.',
+  anchors: 'From the side and from above.',
+  nuts: 'From the side and from above.',
+  washers: 'From above, and cut through the middle below.',
+};
+const caption = fig?.caption ?? VIEWS[cat.key];
+
+const title = `${f.name} Specifications`;
+const fmt = (r: DimensionRange) => `${r.min}" - ${r.max}"`;
+const prop = (name: string, value: string | undefined) => (value ? [{ '@type': 'PropertyValue', name, value }] : []);
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProductModel',
+  name: f.name,
+  description: f.description,
+  category: `Fastener > ${cat.one}`,
+  material: f.materials.map((m: string) => m.replace(/-/g, ' ')).join(', '),
+  ...(f.aliases?.length ? { alternateName: f.aliases } : {}),
+  additionalProperty: [
+    ...prop('Washer Type', f.washerType),
+    ...prop('Base Materials', f.baseMaterial?.map((m: string) => m.replace(/-/g, ' ')).join(', ')),
+    ...prop('Head Style', f.headStyle),
+    ...prop('Drive Type', f.driveType),
+    ...prop('Thread Type', f.threadType),
+    ...prop('Point Type', f.pointType),
+    ...prop('Locking Mechanism', f.lockingMechanism),
+    ...(f.nutRequired !== undefined ? prop('Nut Required', f.nutRequired ? 'Yes' : 'No') : []),
+    ...prop('Tension Capacity', f.loadCapacity?.tension ? `${f.loadCapacity.tension} ${f.loadCapacity.unit}` : undefined),
+    ...prop('Shear Capacity', f.loadCapacity?.shear ? `${f.loadCapacity.shear} ${f.loadCapacity.unit}` : undefined),
+    ...prop('Diameter Range', f.diameterRange && fmt(f.diameterRange)),
+    ...prop('Length Range', f.lengthRange && fmt(f.lengthRange)),
+    ...prop('Inner Diameter Range', f.innerDiameterRange && fmt(f.innerDiameterRange)),
+    ...prop('Outer Diameter Range', f.outerDiameterRange && fmt(f.outerDiameterRange)),
+    ...prop('Thickness Range', f.thicknessRange && fmt(f.thicknessRange)),
+    ...prop('Standards', f.standards?.join(', ')),
+  ],
+};
+---
+
+<BaseLayout title={title} description={f.description} canonical={canonicalFor(cat.key, f.slug)}>
+  <BreadcrumbSchema items={[{ label: cat.name, href: `/${cat.key}` }, { label: f.name }]} />
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="wrap pt-5">
+    <nav class="crumbs mb-5" aria-label="Breadcrumb">
+      <a href="/">Home</a> <span aria-hidden="true">/</span>
+      <a href={`/${cat.key}`}>{cat.name}</a> <span aria-hidden="true">/</span>
+      <span class="text-ink" aria-current="page">{f.name}</span>
+    </nav>
+
+    <div class="entry">
+      <header class="entry-head">
+        <a class="tag mb-2.5" href={`/${cat.key}`}>{cat.one}</a>
+        <h1 class="text-[1.75rem] sm:text-[2.15rem]">{f.name}</h1>
+        {f.aliases?.length > 0 && <p class="mt-1.5 text-[0.78rem] text-muted">Also called {f.aliases.join(', ')}</p>}
+        <p class="mt-3 text-[0.98rem] leading-[1.5] text-ink-2 max-w-[36rem]">{f.description}</p>
+      </header>
+
+      <figure class="entry-pic picture">
+        <div class="picture-stage">
+          <Figure category={cat.key} slug={f.slug} variant="full" words={words} label={`A ${f.name.toLowerCase()}, ${caption.charAt(0).toLowerCase()}${caption.slice(1)}`} />
+        </div>
+        <figcaption>{caption} Drawn at a typical length, not actual size. <a href="/sizes" class="link">How to read a size</a></figcaption>
+      </figure>
+
+      <div class="entry-body">
+        <section class="mb-10" aria-label="At a glance">
+          <dl class="facts sm:grid-cols-2">
+            {attrs.map((a) => (
+              <div class="fact">
+                <dt class="label">{a.k}</dt>
+                <dd class="v">{a.v}</dd>
+                {a.s && <dd class="s">{a.s}</dd>}
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="section-title">What it is used for</h2>
+          <div class="grid gap-x-10 gap-y-6 sm:grid-cols-2">
+            <div>
+              <h3 class="label mb-1">Used for</h3>
+              <ul class="ticks">{f.applications.map((x: string) => <li><span>{x}</span></li>)}</ul>
+            </div>
+            {f.notRecommendedFor?.length > 0 && (
+              <div>
+                <h3 class="label mb-1">Not for</h3>
+                <ul class="ticks no">{f.notRecommendedFor.map((x: string) => <li><span>{x}</span></li>)}</ul>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <section class="mb-10">
+          <h2 class="section-title">Sizes it comes in</h2>
+          <dl class="facts sm:grid-cols-2">
+            {shown.map((d) => (
+              <div class="fact">
+                <dt class="label">{d.name}</dt>
+                <dd class="v num">{d.v.main}</dd>
+                <dd class="s num">{d.v.sub}</dd>
+                {d.dim?.note && <dd class="s">{d.dim.note}</dd>}
+              </div>
+            ))}
+          </dl>
+          <p class="text-[0.72rem] text-muted mt-2.5">Made in {systems.join(' and ')} sizes. <a href="/sizes" class="link">How to read a size</a></p>
+        </section>
+
+        {f.loadCapacity && (
+          <section class="mb-10">
+            <h2 class="section-title">How much it holds</h2>
+            <dl class="facts sm:grid-cols-2">
+              {f.loadCapacity.tension && (
+                <div class="fact"><dt class="label">Pulling straight out (tension)</dt><dd class="v num">{f.loadCapacity.tension.toLocaleString('en-US')} {f.loadCapacity.unit}</dd></div>
+              )}
+              {f.loadCapacity.shear && (
+                <div class="fact"><dt class="label">Pulling sideways (shear)</dt><dd class="v num">{f.loadCapacity.shear.toLocaleString('en-US')} {f.loadCapacity.unit}</dd></div>
+              )}
+            </dl>
+            <p class="text-[0.72rem] text-muted mt-2.5 max-w-[38rem]">Load ratings are typical values. Actual capacity varies by installation conditions, base material quality, and anchor size.</p>
+          </section>
+        )}
+
+        {f.lockingMechanism && LOCKING[f.lockingMechanism] && (
+          <section class="mb-10">
+            <h2 class="section-title">How it locks</h2>
+            <div class="callout"><strong class="font-bold">{label(f.lockingMechanism)}.</strong> {LOCKING[f.lockingMechanism]}</div>
+          </section>
+        )}
+
+        <section class="mb-10">
+          <h2 class="section-title">What it is made of</h2>
+          <ul class="flex flex-wrap gap-1.5">
+            {f.materials.map((m: string) => <li class="chip">{label(m)}</li>)}
+          </ul>
+        </section>
+
+        {f.standards?.length > 0 && (
+          <section class="mb-10">
+            <h2 class="section-title">Standards</h2>
+            <ul class="flex flex-wrap gap-1.5">
+              {f.standards.map((s: string) => <li class="chip">{s}</li>)}
+            </ul>
+          </section>
+        )}
+
+        {related.length > 0 && (
+          <section>
+            <h2 class="section-title">Similar fasteners</h2>
+            <div class="rows">
+              {related.map(({ c, item }) => (
+                <a class="row" href={`/${c.key}/${item.slug}`}>
+                  <span class="pic"><Figure category={c.key} slug={item.slug} variant="mini" scale={0.055} /></span>
+                  <span class="min-w-0"><span class="n block">{item.name}</span><span class="d block">{item.description}</span></span>
+                </a>
+              ))}
+            </div>
+            <p class="mt-4"><a class="btn" href={`/compare?a=${f.slug}&b=${related[0].item.slug}`}>Compare with {related[0].item.name.toLowerCase()}</a></p>
+          </section>
+        )}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
