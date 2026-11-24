@@ -1,6 +1,6 @@
 # fasteners.fyi
 
-Comprehensive, open-source fastener specifications database. Screws, bolts, anchors, and nuts - objective data only, no opinions.
+Open-source fastener specifications database, with a generated picture of every entry. Screws, bolts, anchors, nuts and washers. Objective data only, no opinions.
 
 ## Principles
 
@@ -11,11 +11,18 @@ Comprehensive, open-source fastener specifications database. Screws, bolts, anch
 
 ## Tech Stack
 
-- **Astro 5** - Static site generation
+- **Astro 7** - Static site generation
 - **Tailwind 4** - Utility-first CSS
-- **TypeScript** - Type safety for data handling
+- **TypeScript** - Type safety for data handling, and the picture generator
 - **JSON Database** - Version-controlled fastener specifications
 - **Netlify** - Static hosting
+
+## Pictures
+
+No image files. Each entry's picture is generated at build time from a short
+description of the part (head, drive, thread form, point, proportions) and
+rendered as inline SVG: the part as solid metal, from the side and from above,
+with its measurements named on it. See [docs/DRAWINGS.md](docs/DRAWINGS.md).
 
 ## Development
 
@@ -33,7 +40,8 @@ npm run preview      # Preview production build
 ├── screws/          # Wood screws, machine screws, self-tapping
 ├── bolts/           # Hex bolts, carriage bolts, structural
 ├── anchors/         # Wall anchors, concrete anchors, toggle bolts
-└── nuts/            # Hex nuts, lock nuts, wing nuts
+├── nuts/            # Hex nuts, lock nuts, wing nuts
+└── washers/         # Flat, lock, spring and sealing washers
 ```
 
 ## License
